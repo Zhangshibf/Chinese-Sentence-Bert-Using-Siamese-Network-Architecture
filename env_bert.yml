@@ -1,0 +1,10 @@
+name: cn_bert
+channels:
+    - defaults
+dependencies:
+    - pip==21.1.2
+    - python==3.7.6
+    - pip:
+        - transformers == 4.21.1
+        - pands
+        - torch
