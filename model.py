@@ -31,7 +31,10 @@ def load_data(data_path):
 
 def create_dataloader(sentences,label):
     tokenizer = transformers.BertTokenizer.from_pretrained("hfl/chinese-bert-wwm")
-    sent_id = tokenizer.batch_encode_plus(sentences, padding=True, return_token_type_ids=False)
+    tokens = tokenizer.batch_encode_plus(sentences, padding=True, return_token_type_ids=False)
+    x = torch.tensor(tokens['input_ids'])
+    x_mask = torch.tensor(tokens['attention_mask'])
+    y = torch.tensor(tokens.tolist())
 
 def train_model():
     pass
