@@ -3,6 +3,7 @@ import torch
 import transformers
 import json
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+import dataloader
 #from sentence_transformers import SentenceTransformer, models, losses
 
 
@@ -13,6 +14,7 @@ def evaluate_model():
     pass
 def create_model():
     word_model = transformers.BertModel.from_pretrained("hfl/chinese-bert-wwm")
+    model = transformers.BertModel.from_pretrained("MODEL_NAME")
 #pooling_model
 #sentence model is word model and pooling model ensembled together
 #dataloader is always the same as in the transformers module
