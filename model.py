@@ -5,49 +5,64 @@ import json
 from torch import nn
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
 import dataloader
-#from sentence_transformers import CosineSimilarityLoss
-#from sentence_transformers import SentenceTransformer, models, losses
 
-def cosione_similarity_loss(embeddings,labels):
-    pass
 
 def train_model(epoch,dataloader,model,optimizer):
-    loss_f = CosineSimilarityLoss(model)
+    loss_f = nn.CosineEmbeddingLoss
     total_loss = 0
-    batch_size = len(epoch[0])
     for i in epoch:
         print("-----------------Epoch {}------------------".format(i))
 
         for batch in dataloader:
-            sent_id, mask, labels = batch
-            sen_embeds = model(sent_id,mask)
-            loss = loss_f(sen_embeds,labels)
-            total_loss += loss
-            loss.backward()
-            optimizer.step()
-        avg_loss = total_loss / len(train_dataloader)
+            for sentence_pair in batch:
+                sen_id, mask, label = sentence_pair
+                sen_id1 = sen_id[0]
+                mask1 = mask[0]
+                sen_embeds1 = model(sen_id1, mask1)
+
+                sen_id2 = sen_id[1]
+                mask2 = mask[1]
+                sen_embeds2 = model(sen_id2, mask2)
+
+                loss = loss_f(sen_embeds1,sen_embeds2,label)
+                total_loss += loss
+                loss.backward()
+                optimizer.step()
+        avg_loss = total_loss / len(dataloader)
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
 
 
-def evaluate_model(dataloader):
-    total = len(dataloader)
-    for instance in dataloader:
-        sent_id, mask, labels = instance
+def evaluate_model(epoch,dataloader,model,optimizer):
+    total_instances = len(dataloader)
+    correct_pred = 0
+    for i in epoch:
+        print("-----------------Epoch {}------------------".format(i))
 
+        for batch in dataloader:
+            for sentence_pair in batch:
+                sen_id, mask, label = sentence_pair
+                sen_id1 = sen_id[0]
+                mask1 = mask[0]
+                sen_embeds1 = model(sen_id1, mask1)
 
-class CosineSimilarityLoss(nn.Module):
+                sen_id2 = sen_id[1]
+                mask2 = mask[1]
+                sen_embeds2 = model(sen_id2, mask2)
 
-    def __init__(self, model, loss_fct = nn.MSELoss(), cos_score_transformation=nn.Identity()):
-        super(CosineSimilarityLoss, self).__init__()
-        self.model = model
-        self.loss_fct = loss_fct
-        self.cos_score_transformation = cos_score_transformation
+                similarity = sen_embeds1*sen_embeds2
+                if -1 <= similarity <= -1+2/3:
+                    pred = -1
+                elif -1+2/3 < similarity < 1-2/3:
+                    pred = 0
+                elif -1+4/3<= similarity <=1:
+                    pred = 1
+                else:
+                    pred = 100
+                if pred == label:
+                    correct_pred+=1
 
+        print(("-----------------Accuracy {}------------------".format(correct_pred/total_instances)))
 
-    def forward(self, sentence_features, labels):
-        embeddings = [self.model(sentence_feature)['sentence_embedding'] for sentence_feature in sentence_features]
-        output = self.cos_score_transformation(torch.cosine_similarity(embeddings[0], embeddings[1]))
-        return self.loss_fct(output, labels.view(-1))
 
 
 class CSBERT(nn.Module):
@@ -58,7 +73,7 @@ class CSBERT(nn.Module):
         if freeze !=0:
             #freeze bert layers here
             pass
-        self.pooling = self.pooling_layer(pooling)
+        self.pooling = nn.AvgPool1d(265, stride=265)#need to be changed
         self.linear = nn.Linear(123, out_features = out_features)
 
     def forward(self,sent_id,mask):
@@ -81,8 +96,3 @@ class CSBERT(nn.Module):
         return pooled
     def get_word_embedding_dimension(self) -> int:
         pass
-
-#pooling_model
-#sentence model is word model and pooling model ensembled together
-#dataloader is always the same as in the transformers module
-#train_loss = losses.CosineSimilarityLoss(model)

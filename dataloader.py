@@ -11,14 +11,14 @@ def load_data(data_path):
     sentences = list()
     label = list()
     for i in train:
-        if i["label"] == "entailment":
-            label.append(1)
-        elif i["label"] == "neutral":
-            label.append(0)
-        elif i["label"] == "contradiction":
-            label.append(-1)
+        if i["label"] != "-": #some sentence pairs have no label. These instances are excluded from train set
+            if i["label"] == "entailment":
+                label.append(1)
+            elif i["label"] == "neutral":
+                label.append(0)
+            elif i["label"] == "contradiction":
+                label.append(-1)
 
-        if i["label"] != "-":
             sentences.append(i["sentence1"])
             sentences.append(i["sentence2"])
 
