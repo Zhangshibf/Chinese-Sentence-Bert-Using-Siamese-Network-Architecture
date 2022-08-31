@@ -65,7 +65,7 @@ def create_dataloader(data_path,batch_size = 25):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the dataloader.')
     parser.add_argument('path',help = "path to the OCNLI train set")
-    parser.add_argument("pathpickle",help = "where to save the pickled data loader")
+    parser.add_argument('pathpickle',help = "where to save the pickled data loader")
     parser.parse_args()
     dataloader = create_dataloader(parser.path)
 
