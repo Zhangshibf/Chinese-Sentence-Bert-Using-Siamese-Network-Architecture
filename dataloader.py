@@ -43,17 +43,14 @@ def create_dataloader(data_path,batch_size = 25):
     for i in range(len(sentences)):
         pair = list()
         if i%2==0 and i<len(sentences):
-            try:
-                pair.append(sentences[i])
-                pair.append(sentences[i+1])
-                sentence_pairs.append(pair)
-            except:
-                print(i)
-                print(len(sentences))
+            pair.append(sentences[i])
+            pair.append(sentences[i+1])
+            sentence_pairs.append(pair)
+
 
     for i in range(len(sentences)):
         pair = list()
-        if i%2==1 and i<len(sentences):
+        if i%2==0 and i<len(sentences):
             pair.append(masks[i])
             pair.append(masks[i+1])
             attention_mask_pairs.append(pair)
