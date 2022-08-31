@@ -1,4 +1,4 @@
-name: cn_bert
+name: csbert
 channels:
     - defaults
 dependencies:
