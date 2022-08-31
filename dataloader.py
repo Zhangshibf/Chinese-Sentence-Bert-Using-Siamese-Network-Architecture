@@ -25,6 +25,7 @@ def load_data(data_path):
             sentences.append(i["sentence2"])
 
     if len(sentences)==2*len(label):
+        print(len(sentences))
         return sentences, label
     else:
         raise Exception("Check your code.")
@@ -41,7 +42,7 @@ def create_dataloader(data_path,batch_size = 25):
     attention_mask_pairs = list()
     for i in range(len(sentences)):
         pair = list()
-        if i%2==1 and i<len(sentences):
+        if i%2==0 and i<len(sentences):
             pair.append(sentences[i])
             pair.append(sentences[i+1])
             sentence_pairs.append(pair)
