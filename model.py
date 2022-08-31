@@ -1,10 +1,6 @@
-import pandas
-import torch
 import transformers
-import json
 from torch import nn
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-import dataloader
+from dataloader import create_dataloader
 
 
 def train_model(epoch,dataloader,model,optimizer):
@@ -66,7 +62,6 @@ def evaluate_model(epoch,dataloader,model,optimizer):
 
 
 class CSBERT(nn.Module):
-
     def __int__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",out_features = 265,freeze=0):
         super(CSBERT, self).__init__()
         self.bert = transformers.BertModel.from_pretrained(model_name)
@@ -85,14 +80,12 @@ class CSBERT(nn.Module):
         return sentence_embedding
 
 
-    def pooling_layer(self,pooling,feature):
-        assert pooling in ["mean","cls"]
-        pooled = list()
-        if pooling == "cls":
-            pooled.append(feature[:, 0])#This could be wrong. Check this later
-        else:
-            pass
+#    def pooling_layer(self,pooling,feature):
+#        assert pooling in ["mean","cls"]
+#        pooled = list()
+#        if pooling == "cls":
+#            pooled.append(feature[:, 0])#This could be wrong. Check this later
+#        else:
+#            pass
 
-        return pooled
-    def get_word_embedding_dimension(self) -> int:
-        pass
+#        return pooled

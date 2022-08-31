@@ -2,6 +2,8 @@ import torch
 import transformers
 import json
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+import argparse
+import pickle
 
 def load_data(data_path):
     train = []
@@ -59,3 +61,14 @@ def create_dataloader(data_path,batch_size = 25):
     dataloader = DataLoader(data, sampler=sampler, shuffle = True,batch_size=batch_size)
 
     return dataloader
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Test the dataloader.')
+    parser.add_argument('path',help = "path to the OCNLI train set")
+    parser.add_argument("batchsize",help = "batch size of the dataset")
+    parser.add_argument("pathpickle",help = "where to save the pickled data loader")
+    parser.parse_args()
+    dataloader = create_dataloader(parser.path, parser.batch_size)
+
+    with open(parser.pathpickle, 'wb') as f:
+        pickle.dump(object, f)
