@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument('--path',help = "path to the OCNLI train set")
     parser.add_argument('--a',help = "where to save the pickled data loader")
     parser.parse_args()
-    dataloader = create_dataloader(parser.path)
+    dataloader = create_dataloader(parser.--path)
 
-    with open(parser.pathpickle, 'wb') as f:
+    with open(parser.--a, 'wb') as f:
         pickle.dump(object, f)
