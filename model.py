@@ -6,19 +6,20 @@ from dataloader import create_dataloader
 def train_model(epoch,dataloader,model,optimizer):
     loss_f = nn.CosineEmbeddingLoss
     total_loss = 0
-    for i in epoch:
-        print("-----------------Epoch {}------------------".format(i))
+    for k in epoch:
+        print("-----------------Epoch {}------------------".format(k))
 
         for batch in dataloader:
-            for sentence_pair in batch:
-                sen_id, mask, label = sentence_pair
-                sen_id1 = sen_id[0]
-                mask1 = mask[0]
+            for i in range(len(batch[0])):
+                sen_id1 = batch[0][i][0]
+                mask1 = batch[1][i][0]
                 sen_embeds1 = model(sen_id1, mask1)
 
-                sen_id2 = sen_id[1]
-                mask2 = mask[1]
+                sen_id2 = batch[0][i][1]
+                mask2 = batch[1][i][1]
                 sen_embeds2 = model(sen_id2, mask2)
+
+                label = batch[2][i]
 
                 loss = loss_f(sen_embeds1,sen_embeds2,label)
                 total_loss += loss
@@ -31,21 +32,22 @@ def train_model(epoch,dataloader,model,optimizer):
 def evaluate_model(epoch,dataloader,model,optimizer):
     total_instances = len(dataloader)
     correct_pred = 0
-    for i in epoch:
-        print("-----------------Epoch {}------------------".format(i))
+    for k in epoch:
+        print("-----------------Epoch {}------------------".format(k))
 
         for batch in dataloader:
-            for sentence_pair in batch:
-                sen_id, mask, label = sentence_pair
-                sen_id1 = sen_id[0]
-                mask1 = mask[0]
+            for i in range(len(batch[0])):
+                sen_id1 = batch[0][i][0]
+                mask1 = batch[1][i][0]
                 sen_embeds1 = model(sen_id1, mask1)
 
-                sen_id2 = sen_id[1]
-                mask2 = mask[1]
+                sen_id2 = batch[0][i][1]
+                mask2 = batch[1][i][1]
                 sen_embeds2 = model(sen_id2, mask2)
 
-                similarity = sen_embeds1*sen_embeds2
+                label = batch[2][i]
+
+                similarity = sen_embeds1*sen_embeds2#I am not sure if this works... I will check it later
                 if -1 <= similarity <= -1+2/3:
                     pred = -1
                 elif -1+2/3 < similarity < 1-2/3:
