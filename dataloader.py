@@ -60,7 +60,7 @@ def create_dataloader(data_path,batch_size = 25):
     y = torch.tensor(label)
     data = TensorDataset(x, x_mask, y)
     sampler = RandomSampler(data)
-    dataloader = DataLoader(data, sampler=sampler, shuffle = True,batch_size=batch_size)
+    dataloader = DataLoader(data, sampler=sampler, batch_size=batch_size)
 
     return dataloader
 
