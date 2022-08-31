@@ -71,4 +71,4 @@ if __name__ == "__main__":
     dataloader = create_dataloader(args.path)
 
     with open(args.a, 'wb') as f:
-        pickle.dump(object, f)
+        pickle.dump(dataloader, f)
