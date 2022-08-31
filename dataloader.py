@@ -25,7 +25,6 @@ def load_data(data_path):
             sentences.append(i["sentence2"])
 
     if len(sentences)==2*len(label):
-        print(len(sentences))
         return sentences, label
     else:
         raise Exception("Check your code.")
