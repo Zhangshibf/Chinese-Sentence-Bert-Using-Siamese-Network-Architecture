@@ -43,9 +43,13 @@ def create_dataloader(data_path,batch_size = 25):
     for i in range(len(sentences)):
         pair = list()
         if i%2==0 and i<len(sentences):
-            pair.append(sentences[i])
-            pair.append(sentences[i+1])
-            sentence_pairs.append(pair)
+            try:
+                pair.append(sentences[i])
+                pair.append(sentences[i+1])
+                sentence_pairs.append(pair)
+            except:
+                print(i)
+                print(len(sentences))
 
     for i in range(len(sentences)):
         pair = list()
