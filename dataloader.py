@@ -66,9 +66,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the dataloader.')
     parser.add_argument('--path',help = "path to the OCNLI train set")
     parser.add_argument('--a',help = "where to save the pickled data loader")
-    parser.parse_args()
-    print(parser)
-    dataloader = create_dataloader(parser.path)
+    args = parser.parse_args()
+    dataloader = create_dataloader(args.path)
 
-    with open(parser.a, 'wb') as f:
+    with open(args.a, 'wb') as f:
         pickle.dump(object, f)
