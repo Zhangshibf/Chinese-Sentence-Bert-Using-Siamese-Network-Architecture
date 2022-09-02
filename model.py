@@ -47,25 +47,17 @@ class CSBERT(nn.Module):
         self.bert = transformers.BertModel.from_pretrained(model_name)
 #        if freeze !=0:
             #freeze bert layers here
-        self.pooling = nn.AvgPool1d(768, stride=768)#need to be changed
+#        self.pooling = nn.AvgPool1d(768, stride=768)
         self.linear = nn.Linear(768, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
-        out = self.bert(sent_id1, attention_mask=mask1)
-        print(out[0].shape)
-        pooled = out[0].sum(axis=1)/62
-        print(pooled.shape)
-        averaged = torch.mean((out[0] * mask1.unsqueeze(-1)), axis=1)
-        print(averaged.shape)
-#        pooled1 = self.pooling(out[0].permute(0,2,1)).permute(0,2,1)
-        print(pooled1.shape)
-        #use attention mask for pooling. Don't pool tokens that are padding
-        #pooled 后size应该是25,768
+        out1 = self.bert(sent_id1, attention_mask=mask1)
+        pooled1 = torch.mean((out1[0] * mask1.unsqueeze(-1)), axis=1)#check if correct
         sentence_embedding1 = self.linear(pooled1)
 
-        out = self.bert(sent_id2, attention_mask=mask2)
-        pooled2 = self.pooling(out[0])
+        out2 = self.bert(sent_id2, attention_mask=mask2)
+        pooled2 = torch.mean((out2[0] * mask2.unsqueeze(-1)), axis=1)
         sentence_embedding2 = self.linear(pooled2)
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
