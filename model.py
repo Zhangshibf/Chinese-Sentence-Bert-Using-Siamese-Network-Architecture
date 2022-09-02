@@ -8,7 +8,7 @@ from dataloader import create_dataloader
 
 
 def train_model(epoch,dataloader,model,optimizer):
-    loss_f = nn.CosineEmbeddingLoss
+    loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
