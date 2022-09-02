@@ -29,7 +29,7 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
-
+            print(outputs)
 #            print(outputs.shape)
 #            print(label.shape)
 #            print(one_hot_label.shape)
@@ -98,7 +98,6 @@ if __name__ == "__main__":
     with open(args.path, 'rb') as pickle_file:
         data = pickle.load(pickle_file)
 
-    print("Attention! Error is coming!")
     epoch = 10
     dataloader = data
     model = CSBERT()
