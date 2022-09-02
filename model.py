@@ -28,9 +28,11 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
+            predictions = torch.argmax(outputs, dim=1)
             print(outputs.shape)
+            print(predictions.shape)
             print(label.shape)
-            loss = loss_f(outputs, label)
+            loss = loss_f(predictions, label)
             total_loss += loss
 
             loss.backward()
@@ -58,17 +60,13 @@ class CSBERT(nn.Module):
         out1 = self.bert(sent_id1, attention_mask=mask1)
         pooled1 = torch.mean((out1[0] * mask1.unsqueeze(-1)), axis=1)#check if correct
         sentence_embedding1 = self.linear1(pooled1)
-        print("sentence_embedding1")
-        print(sentence_embedding1.shape)
 
         out2 = self.bert(sent_id2, attention_mask=mask2)
         pooled2 = torch.mean((out2[0] * mask2.unsqueeze(-1)), axis=1)
         sentence_embedding2 = self.linear1(pooled2)
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 1)
-        print(embedding_concat.shape)
         out_linear = self.linear2(embedding_concat)
-        print(out_linear.shape)
         prediction = self.softmax(out_linear)
 
         return prediction
