@@ -61,8 +61,8 @@ class CSBERT(nn.Module):
         sentence_embedding1 = self.linear(pooled1)
 
         out = self.bert(sent_id2, attention_mask=mask2)
-        pooled2 = self.pooling(out[0])
-        sentence_embedding2 = self.linear(pooled2)
+        pooled2 = self.pooling(out[0].permute(0,2,1))
+        sentence_embedding2 = self.linear(pooled2.permute(0,2,1))
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
         prediction = self.softmax(embedding_concat)
@@ -70,42 +70,6 @@ class CSBERT(nn.Module):
         return prediction
 
 
-def evaluate_model(epoch,dataloader,model,optimizer):
-    pass
-    total_instances = len(dataloader)
-    correct_pred = 0
-    for k in epoch:
-        print("-----------------Epoch {}------------------".format(k))
-
-        for batch in dataloader:
-            for i in range(len(batch[0])):
-                sen_id1 = batch[0][i][0]
-                mask1 = batch[1][i][0]
-                sen_embeds1 = model(sen_id1, mask1)
-
-                sen_id2 = batch[0][i][1]
-                mask2 = batch[1][i][1]
-                sen_embeds2 = model(sen_id2, mask2)
-
-                label = batch[2][i]
-
-                similarity = sen_embeds1*sen_embeds2#I am not sure if this works... I will check it later
-                if -1 <= similarity <= -1+2/3:
-                    pred = -1
-                elif -1+2/3 < similarity < 1-2/3:
-                    pred = 0
-                elif -1+4/3<= similarity <=1:
-                    pred =1
-                else:
-                    pred = 100
-                if pred == label:
-                    correct_pred+=1
-
-        print(("-----------------Accuracy {}------------------".format(correct_pred/total_instances)))
-
-
-def evaluate_QBQTC(epoch,dataloader,model,optimizer):
-    pass
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
