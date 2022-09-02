@@ -13,8 +13,8 @@ def train_model(epoch,dataloader,model,optimizer):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
     correct_pred = 0
-    for k in epoch:
-        print("-----------------Training Epoch {}------------------".format(k))
+    for k in range(epoch):
+        print("-----------------Training Epoch {}------------------".format(k+1))
 
         for batch in dataloader:
             optimizer.zero_grad()
