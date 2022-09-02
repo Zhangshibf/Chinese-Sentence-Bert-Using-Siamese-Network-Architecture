@@ -21,6 +21,7 @@ def train_model(epoch,dataloader,model,optimizer):
             instance = batch[0]
             mask = batch[1]
             label = batch[2]
+            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
 
             instance1 = instance[:,0,:].to(device)
             instance2 = instance[:,1,:].to(device)
@@ -28,22 +29,31 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
-            predictions = torch.argmax(outputs, dim=1)
+
             print(outputs.shape)
-            print(predictions.shape)
             print(label.shape)
-            loss = loss_f(predictions, label)
+            print(one_hot_label.shape)
+            loss = loss_f(outputs, one_hot_label)
             total_loss += loss
 
             loss.backward()
             optimizer.step()
-            #update correct prediction
+
+            correct_pred += calculate_correct_prediction(outputs,label)
+
         avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
         avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
-        print(("-----------------Average Accuracy {}------------------".format(avg_loss)))
+        print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-
+def calculate_correct_prediction(outputs,label):
+    predictions = torch.argmax(outputs, dim=1).tolist()
+    label = label.tolist()
+    n = 0
+    for i,j in zip(predictions,label):
+        if i==j:
+            n+=1
+    return n
 class CSBERT(nn.Module):
     def __init__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
         super(CSBERT, self).__init__()
