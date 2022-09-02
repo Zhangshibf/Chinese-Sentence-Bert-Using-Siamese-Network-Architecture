@@ -47,24 +47,19 @@ class CSBERT(nn.Module):
         self.bert = transformers.BertModel.from_pretrained(model_name)
 #        if freeze !=0:
             #freeze bert layers here
-        self.pooling = nn.AvgPool1d(265, stride=265)#need to be changed
+        self.pooling = nn.AvgPool1d(768, stride=768)#need to be changed
         self.linear = nn.Linear(123, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
-        # pass the inputs to the model
-        o = self.bert(sent_id1, attention_mask=mask1)#not sure if the output is correct. Needs to be checked
-        print("o0")
-        print(o[0])
-        print(o[0].shape)
-        print("o1")
-        print(o[1])
-        print(o[1].shape)
-        pooled1 = self.pooling(tokens1)#need to be changed
+        out = self.bert(sent_id1, attention_mask=mask1)
+        print(out[0].shape)
+        pooled1 = self.pooling(out[0])
+        print(pooled1[0].shape)
         sentence_embedding1 = self.linear(pooled1)
 
-        tokens2,cls2 = self.bert(sent_id2, attention_mask=mask2)#not sure if the output is correct. Needs to be checked
-        pooled2 = self.pooling(tokens2)#need to be changed
+        out = self.bert(sent_id2, attention_mask=mask2)
+        pooled2 = self.pooling(out[0])
         sentence_embedding2 = self.linear(pooled2)
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
