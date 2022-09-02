@@ -31,6 +31,8 @@ def train_model(epoch,dataloader,model,optimizer):
 
             outputs = model(instance1,mask1,instance2,mask2)
             one_hot_label = one_hot_label.float()
+            print(outputs.is_cuda)
+            print(one_hot_label.is_cuda)
             loss = loss_f(outputs, one_hot_label)
             total_loss += loss
 
