@@ -54,8 +54,11 @@ class CSBERT(nn.Module):
     def forward(self,sent_id1,mask1,sent_id2,mask2):
         out = self.bert(sent_id1, attention_mask=mask1)
         print(out[0].shape)
-        print(out[0].permute(0,2,1).shape)
-        pooled1 = self.pooling(out[0].permute(0,2,1)).permute(0,2,1)
+        pooled = out[0].sum(axis=1)/62
+        print(pooled.shape)
+        averaged = torch.mean((out[0] * mask1.unsqueeze(-1)), axis=1)
+        print(averaged.shape)
+#        pooled1 = self.pooling(out[0].permute(0,2,1)).permute(0,2,1)
         print(pooled1.shape)
         #use attention mask for pooling. Don't pool tokens that are padding
         #pooled 后size应该是25,768
