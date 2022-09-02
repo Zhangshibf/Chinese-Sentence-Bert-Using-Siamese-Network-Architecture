@@ -8,6 +8,7 @@ from dataloader import create_dataloader
 
 
 def train_model(dataloader,model,optimizer,device):
+    model.train()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
 
@@ -42,32 +43,34 @@ def train_model(dataloader,model,optimizer,device):
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
 def evaluate_model(dataloader,model,device):
+    model.eval()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
 
-    for batch in dataloader:
-        instance = batch[0]
-        batch_size = instance.shape[0]
-        mask = batch[1]
-        label = batch[2]
-        one_hot_label = nn.functional.one_hot(label,num_classes = 3)
+    with torch.no_grad():
+        for batch in dataloader:
+            instance = batch[0]
+            batch_size = instance.shape[0]
+            mask = batch[1]
+            label = batch[2]
+            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
 
-        instance1 = instance[:,0,:].to(device)
-        instance2 = instance[:,1,:].to(device)
-        mask1 = mask[:,0,:].to(device)
-        mask2 = mask[:,1,:].to(device)
+            instance1 = instance[:,0,:].to(device)
+            instance2 = instance[:,1,:].to(device)
+            mask1 = mask[:,0,:].to(device)
+            mask2 = mask[:,1,:].to(device)
 
-        outputs = model(instance1,mask1,instance2,mask2)
-        one_hot_label = one_hot_label.float().to(device)
-        loss = loss_f(outputs, one_hot_label)
-        total_loss += loss
-        correct_pred += calculate_correct_prediction(outputs,label)
+            outputs = model(instance1,mask1,instance2,mask2)
+            one_hot_label = one_hot_label.float().to(device)
+            loss = loss_f(outputs, one_hot_label)
+            total_loss += loss
+            correct_pred += calculate_correct_prediction(outputs,label)
 
-    avg_loss = total_loss / (len(dataloader)*batch_size)
-    avg_accuracy = correct_pred/(len(dataloader)*batch_size)
-    print(("-----------------Average Loss {}------------------".format(avg_loss)))
-    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
+        avg_loss = total_loss / (len(dataloader)*batch_size)
+        avg_accuracy = correct_pred/(len(dataloader)*batch_size)
+        print(("-----------------Average Loss {}------------------".format(avg_loss)))
+        print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
 def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1):
 
@@ -79,6 +82,15 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
         print("-----------------Evaluating------------------")
         model.to(device1)
         evaluate_model(dev_dataloader, model, device1)
+
+        #save checkpoint
+        if k%3 == 0:
+            model_path = str("/home/CE/zhangshi/mygithubprojects/csbert"+"model"+str(k)+".pt")
+            torch.save({
+                'epoch': k,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+            }, model_path)
 
     print("-----------------Final Evaluation------------------")
     evaluate_model(test_dataloader, model, device1)
