@@ -10,7 +10,6 @@ from dataloader import create_dataloader
 def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
-#    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
 
     correct_pred = 0
 
@@ -134,4 +133,4 @@ if __name__ == "__main__":
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
-    train_model(epoch, dataloader, model, optimizer)
+    train_model(dataloader, model, optimizer)
