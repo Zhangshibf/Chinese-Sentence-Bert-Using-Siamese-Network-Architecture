@@ -10,7 +10,7 @@ from dataloader import create_dataloader
 def train_model(epoch,dataloader,model,optimizer):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
-    device = torch.device('cuda' if torch.cuda.is_available(device=2) else 'cpu')
+    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
     model.to(device)
     correct_pred = 0
     for k in range(epoch):
