@@ -79,18 +79,13 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
         print("-----------------Training------------------")
         model.to(device0)
         train_model(train_dataloader, model, optimizer,device0)
-#        print("-----------------Evaluating------------------")
-#        model.to(device1)
-#        evaluate_model(dev_dataloader, model, device1)
 
         #save checkpoint
         model_path = str("/home/CE/zhangshi/mygithubprojects/csbert"+"model"+str(k)+".pt")
-        torch.save({
-            'epoch': k,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
-        }, model_path)
-
+        torch.save(optimizer.state_dict(), model_path)
+#        print("-----------------Evaluating------------------")
+#        model.to(device1)
+#        evaluate_model(dev_dataloader, model, device1)
 #    print("-----------------Final Evaluation------------------")
 #    evaluate_model(test_dataloader, model, device1)
 
