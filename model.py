@@ -1,32 +1,67 @@
 import transformers
 from torch import nn
+import torch
 from dataloader import create_dataloader
 
 
 def train_model(epoch,dataloader,model,optimizer):
     loss_f = nn.CosineEmbeddingLoss
     total_loss = 0
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    model.to(device)
+    correct_pred = 0
     for k in epoch:
-        print("-----------------Epoch {}------------------".format(k))
+        print("-----------------Training Epoch {}------------------".format(k))
 
         for batch in dataloader:
-            for i in range(len(batch[0])):
-                sen_id1 = batch[0][i][0]
-                mask1 = batch[1][i][0]
-                sen_embeds1 = model(sen_id1, mask1)
+            optimizer.zero_grad()
+            instance = batch[0]
+            mask = batch[1]
+            label = batch[2]
 
-                sen_id2 = batch[0][i][1]
-                mask2 = batch[1][i][1]
-                sen_embeds2 = model(sen_id2, mask2)
+            instance1 = instance[:,0,:].to(device)
+            instance2 = instance[:,1,:].to(device)
+            mask1 = mask[:,0,:].to(device)
+            mask2 = mask[:,1,:].to(device)
 
-                label = batch[2][i]
+            outputs = model(instance1,mask1,instance2,mask2)
+            loss = loss_f(outputs, label)
+            total_loss += loss
 
-                loss = loss_f(sen_embeds1,sen_embeds2,label)
-                total_loss += loss
-                loss.backward()
-                optimizer.step()
-        avg_loss = total_loss / len(dataloader)
+            loss.backward()
+            optimizer.step()
+        avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
+        avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
+        print(("-----------------Average Accuracy {}------------------".format(avg_loss)))
+
+
+class CSBERT(nn.Module):
+    def __int__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
+        super(CSBERT, self).__init__()
+        self.bert = transformers.BertModel.from_pretrained(model_name)
+#        if freeze !=0:
+            #freeze bert layers here
+        self.pooling = nn.AvgPool1d(265, stride=265)#need to be changed
+        self.linear = nn.Linear(123, out_features = 3)
+        self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
+
+    def forward(self,sent_id1,mask1,sent_id2,mask2):
+        # pass the inputs to the model
+        tokens1,cls1 = self.bert(sent_id1, attention_mask=mask1)#not sure if the output is correct. Needs to be checked
+        print(cls1.shape)
+        print(tokens1.shape)
+        pooled1 = self.pooling(tokens1)#need to be changed
+        sentence_embedding1 = self.linear(pooled1)
+
+        tokens2,cls2 = self.bert(sent_id2, attention_mask=mask2)#not sure if the output is correct. Needs to be checked
+        pooled2 = self.pooling(tokens2)#need to be changed
+        sentence_embedding2 = self.linear(pooled2)
+
+        embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
+        prediction = self.softmax(embedding_concat)
+
+        return prediction
 
 
 def evaluate_model(epoch,dataloader,model,optimizer):
@@ -62,32 +97,5 @@ def evaluate_model(epoch,dataloader,model,optimizer):
         print(("-----------------Accuracy {}------------------".format(correct_pred/total_instances)))
 
 
-
-class CSBERT(nn.Module):
-    def __int__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",out_features = 265,freeze=0):
-        super(CSBERT, self).__init__()
-        self.bert = transformers.BertModel.from_pretrained(model_name)
-        if freeze !=0:
-            #freeze bert layers here
-            pass
-        self.pooling = nn.AvgPool1d(265, stride=265)#need to be changed
-        self.linear = nn.Linear(123, out_features = out_features)
-
-    def forward(self,sent_id,mask):
-        # pass the inputs to the model
-        outputs = self.bert(sent_id, attention_mask=mask)#not sure if the output is correct. Needs to be checked
-        pooled = self.pooling(outputs.last_hidden_state)#need to be changed
-        sentence_embedding = self.linear(pooled)
-
-        return sentence_embedding
-
-
-#    def pooling_layer(self,pooling,feature):
-#        assert pooling in ["mean","cls"]
-#        pooled = list()
-#        if pooling == "cls":
-#            pooled.append(feature[:, 0])#This could be wrong. Check this later
-#        else:
-#            pass
-
-#        return pooled
+def evaluate_QBQTC(epoch,dataloader,model,optimizer):
+    pass
