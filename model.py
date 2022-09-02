@@ -28,6 +28,8 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
+            print(outputs.shape)
+            print(label.shape)
             loss = loss_f(outputs, label)
             total_loss += loss
 
@@ -75,7 +77,7 @@ if __name__ == "__main__":
     with open(args.path, 'rb') as pickle_file:
         data = pickle.load(pickle_file)
 
-    print("Get ready for error!")
+    print("Attention! Error is coming!")
     epoch = 10
     dataloader = data
     model = CSBERT()
