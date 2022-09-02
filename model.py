@@ -93,7 +93,7 @@ def evaluate_model(epoch,dataloader,model,optimizer):
                 elif -1+2/3 < similarity < 1-2/3:
                     pred = 0
                 elif -1+4/3<= similarity <=1:
-                    pred = 1
+                    pred =1
                 else:
                     pred = 100
                 if pred == label:
