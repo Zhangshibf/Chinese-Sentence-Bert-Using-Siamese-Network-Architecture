@@ -54,12 +54,12 @@ class CSBERT(nn.Module):
     def forward(self,sent_id1,mask1,sent_id2,mask2):
         # pass the inputs to the model
         o = self.bert(sent_id1, attention_mask=mask1)#not sure if the output is correct. Needs to be checked
-        print("o")
-        print(o)
         print("o0")
         print(o[0])
+        print(o[0].shape)
         print("o1")
         print(o[1])
+        print(o[1].shape)
         pooled1 = self.pooling(tokens1)#need to be changed
         sentence_embedding1 = self.linear(pooled1)
 
