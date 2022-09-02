@@ -50,21 +50,24 @@ class CSBERT(nn.Module):
 #        if freeze !=0:
             #freeze bert layers here
 #        self.pooling = nn.AvgPool1d(768, stride=768)
-        self.linear = nn.Linear(768, out_features = 3)
+        self.linear1 = nn.Linear(768, out_features = 300)
+        self.linear2 = nn.Linear(900, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
         out1 = self.bert(sent_id1, attention_mask=mask1)
         pooled1 = torch.mean((out1[0] * mask1.unsqueeze(-1)), axis=1)#check if correct
-        sentence_embedding1 = self.linear(pooled1)
+        sentence_embedding1 = self.linear1(pooled1)
+        print("sentence_embedding1")
+        print(sentence_embedding1.shape)
 
         out2 = self.bert(sent_id2, attention_mask=mask2)
         pooled2 = torch.mean((out2[0] * mask2.unsqueeze(-1)), axis=1)
-        sentence_embedding2 = self.linear(pooled2)
+        sentence_embedding2 = self.linear1(pooled2)
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
         print(embedding_concat.shape)
-        out_linear = self.linear(embedding_concat)
+        out_linear = self.linear2(embedding_concat)
         print(out_linear.shape)
         prediction = self.softmax(out_linear)
 
