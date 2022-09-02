@@ -10,7 +10,7 @@ from dataloader import create_dataloader
 def train_model(epoch,dataloader,model,optimizer):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available(device=2) else 'cpu')
     model.to(device)
     correct_pred = 0
     for k in range(epoch):
@@ -29,18 +29,7 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
-#            outputs.float()
             one_hot_label = one_hot_label.float()
-            print(outputs.dtype)
-            print(one_hot_label.dtype)
-#            print(outputs.shape)
-#            print(label.shape)
-#            print(one_hot_label.shape)
-#            torch.Size([25, 3])
-#            torch.Size([25])
-#            torch.Size([25, 3])
-#            one_hot_label = one_hot_label.to(dtype=torch.long)
-#            outputs = outputs.to(dtype=torch.long)
             loss = loss_f(outputs, one_hot_label)
             total_loss += loss
 
