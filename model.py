@@ -30,7 +30,7 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
-            one_hot_label = one_hot_label.float()
+            one_hot_label = one_hot_label.float().to(device)
             print(outputs.is_cuda)
             print(one_hot_label.is_cuda)
             loss = loss_f(outputs, one_hot_label)
