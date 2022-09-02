@@ -29,7 +29,7 @@ def train_model(epoch,dataloader,model,optimizer):
             mask2 = mask[:,1,:].to(device)
 
             outputs = model(instance1,mask1,instance2,mask2)
-            outputs.float()
+#            outputs.float()
             one_hot_label = one_hot_label.float()
             print(outputs.dtype)
             print(one_hot_label.dtype)
