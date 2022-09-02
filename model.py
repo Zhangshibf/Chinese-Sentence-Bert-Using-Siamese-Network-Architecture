@@ -7,42 +7,81 @@ import pickle
 from dataloader import create_dataloader
 
 
-def train_model(epoch,dataloader,model,optimizer):
+def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
 #    device = torch.device('cuda:2' if torch.cuda.is_available() else 'cpu')
+
+    correct_pred = 0
+
+    for batch in dataloader:
+        optimizer.zero_grad()
+        instance = batch[0]
+        mask = batch[1]
+        label = batch[2]
+        one_hot_label = nn.functional.one_hot(label,num_classes = 3)
+
+        instance1 = instance[:,0,:].to(device)
+        instance2 = instance[:,1,:].to(device)
+        mask1 = mask[:,0,:].to(device)
+        mask2 = mask[:,1,:].to(device)
+
+        outputs = model(instance1,mask1,instance2,mask2)
+        one_hot_label = one_hot_label.float().to(device)
+        loss = loss_f(outputs, one_hot_label)
+        total_loss += loss
+
+        loss.backward()
+        optimizer.step()
+
+        correct_pred += calculate_correct_prediction(outputs,label)
+
+    avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
+    avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
+    print(("-----------------Average Loss {}------------------".format(avg_loss)))
+    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
+
+def evaluate_model(dataloader,model,device):
+    loss_f = nn.CrossEntropyLoss()
+    total_loss = 0
+    correct_pred = 0
+
+    for batch in dataloader:
+        instance = batch[0]
+        mask = batch[1]
+        label = batch[2]
+        one_hot_label = nn.functional.one_hot(label,num_classes = 3)
+
+        instance1 = instance[:,0,:].to(device)
+        instance2 = instance[:,1,:].to(device)
+        mask1 = mask[:,0,:].to(device)
+        mask2 = mask[:,1,:].to(device)
+
+        outputs = model(instance1,mask1,instance2,mask2)
+        one_hot_label = one_hot_label.float().to(device)
+        loss = loss_f(outputs, one_hot_label)
+        total_loss += loss
+        correct_pred += calculate_correct_prediction(outputs,label)
+
+    avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
+    avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
+    print(("-----------------Average Loss {}------------------".format(avg_loss)))
+    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
+
+def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader):
     device = torch.device('cuda:1')
     model.to(device)
-    correct_pred = 0
-    for k in range(epoch):
-        print("-----------------Training Epoch {}------------------".format(k+1))
+    for k in epoch:
+        print(("-----------------Epoch {}------------------".format(k)))
+        print("-----------------Training------------------")
+        train_model(train_dataloader, model, optimizer,device)
+        print("-----------------Evaluating------------------")
+        evaluate_model(dev_dataloader, model, device)
 
-        for batch in dataloader:
-            optimizer.zero_grad()
-            instance = batch[0]
-            mask = batch[1]
-            label = batch[2]
-            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
+    print("-----------------Final Evaluation------------------")
+    evaluate_model(test_dataloader, model, device)
 
-            instance1 = instance[:,0,:].to(device)
-            instance2 = instance[:,1,:].to(device)
-            mask1 = mask[:,0,:].to(device)
-            mask2 = mask[:,1,:].to(device)
-
-            outputs = model(instance1,mask1,instance2,mask2)
-            one_hot_label = one_hot_label.float().to(device)
-            loss = loss_f(outputs, one_hot_label)
-            total_loss += loss
-
-            loss.backward()
-            optimizer.step()
-
-            correct_pred += calculate_correct_prediction(outputs,label)
-
-        avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
-        avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
-        print(("-----------------Average Loss {}------------------".format(avg_loss)))
-        print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
+    #add something here to save the model
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
@@ -91,6 +130,7 @@ if __name__ == "__main__":
 
     epoch = 10
     dataloader = data
+    print(len(dataloader))
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
