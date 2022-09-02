@@ -1,6 +1,9 @@
 import transformers
 from torch import nn
 import torch
+import argparse
+from torch import optim
+import pickle
 from dataloader import create_dataloader
 
 
@@ -30,6 +33,7 @@ def train_model(epoch,dataloader,model,optimizer):
 
             loss.backward()
             optimizer.step()
+            #update correct prediction
         avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
         avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
@@ -65,6 +69,7 @@ class CSBERT(nn.Module):
 
 
 def evaluate_model(epoch,dataloader,model,optimizer):
+    pass
     total_instances = len(dataloader)
     correct_pred = 0
     for k in epoch:
@@ -99,3 +104,19 @@ def evaluate_model(epoch,dataloader,model,optimizer):
 
 def evaluate_QBQTC(epoch,dataloader,model,optimizer):
     pass
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Test the code')
+    parser.add_argument('--path',help = "path to the pickled dataset")
+    args = parser.parse_args()
+
+    with open(args.path, 'rb') as pickle_file:
+        data = pickle.load(pickle_file)
+
+    print("Get ready for error!")
+    epoch = 10
+    dataloader = data
+    model = CSBERT()
+    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+    train_model(epoch, dataloader, model, optimizer)
