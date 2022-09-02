@@ -51,7 +51,7 @@ class CSBERT(nn.Module):
             #freeze bert layers here
 #        self.pooling = nn.AvgPool1d(768, stride=768)
         self.linear1 = nn.Linear(768, out_features = 300)
-        self.linear2 = nn.Linear(300, out_features = 3)
+        self.linear2 = nn.Linear(900, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
@@ -65,7 +65,7 @@ class CSBERT(nn.Module):
         pooled2 = torch.mean((out2[0] * mask2.unsqueeze(-1)), axis=1)
         sentence_embedding2 = self.linear1(pooled2)
 
-        embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
+        embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 1)
         print(embedding_concat.shape)
         out_linear = self.linear2(embedding_concat)
         print(out_linear.shape)
