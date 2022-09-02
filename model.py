@@ -41,8 +41,9 @@ def train_model(epoch,dataloader,model,optimizer):
 
 
 class CSBERT(nn.Module):
-    def __int__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
+    def __init__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
         super(CSBERT, self).__init__()
+
         self.bert = transformers.BertModel.from_pretrained(model_name)
 #        if freeze !=0:
             #freeze bert layers here
