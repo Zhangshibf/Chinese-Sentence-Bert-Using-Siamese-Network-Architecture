@@ -69,17 +69,19 @@ def evaluate_model(dataloader,model,device):
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
-    model.to(device)
+def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1):
+
     for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
-        train_model(train_dataloader, model, optimizer,device)
+        model.to(device0)
+        train_model(train_dataloader, model, optimizer,device0)
         print("-----------------Evaluating------------------")
-        evaluate_model(dev_dataloader, model, device)
+        model.to(device1)
+        evaluate_model(dev_dataloader, model, device1)
 
     print("-----------------Final Evaluation------------------")
-    evaluate_model(test_dataloader, model, device)
+    evaluate_model(test_dataloader, model, device1)
 
     #add something here to save the model
 
@@ -134,9 +136,10 @@ if __name__ == "__main__":
     with open(args.test, 'rb') as pickle_file:
         test_dataloader = pickle.load(pickle_file)
 
-    epoch = 10
+    epoch = 30
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    device = torch.device('cuda:1')
+    device1 = torch.device('cuda:1')
+    device0 = torch.device('cuda:0')
 
-    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device)
+    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
