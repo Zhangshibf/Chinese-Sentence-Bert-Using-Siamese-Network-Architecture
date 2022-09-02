@@ -48,7 +48,7 @@ class CSBERT(nn.Module):
 #        if freeze !=0:
             #freeze bert layers here
         self.pooling = nn.AvgPool1d(768, stride=768)#need to be changed
-        self.linear = nn.Linear(123, out_features = 3)
+        self.linear = nn.Linear(768, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
@@ -56,6 +56,8 @@ class CSBERT(nn.Module):
         print(out[0].shape)
         pooled1 = self.pooling(out[0])
         print(pooled1[0].shape)
+        #use attention mask for pooling. Don't pool tokens that are padding
+        #pooled 后size应该是25,768
         sentence_embedding1 = self.linear(pooled1)
 
         out = self.bert(sent_id2, attention_mask=mask2)
