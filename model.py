@@ -36,7 +36,7 @@ def train_model(epoch,dataloader,model,optimizer):
 #            torch.Size([25, 3])
 #            torch.Size([25])
 #            torch.Size([25, 3])
-            one_hot_label = one_hot_label.to(dtype=torch.long)
+#            one_hot_label = one_hot_label.to(dtype=torch.long)
 #            outputs = outputs.to(dtype=torch.long)
             loss = loss_f(outputs, one_hot_label)
             total_loss += loss
