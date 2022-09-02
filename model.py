@@ -56,6 +56,10 @@ class CSBERT(nn.Module):
         o = self.bert(sent_id1, attention_mask=mask1)#not sure if the output is correct. Needs to be checked
         print("o")
         print(o)
+        print("o0")
+        print(o[0])
+        print("o1")
+        print(o[1])
         pooled1 = self.pooling(tokens1)#need to be changed
         sentence_embedding1 = self.linear(pooled1)
 
