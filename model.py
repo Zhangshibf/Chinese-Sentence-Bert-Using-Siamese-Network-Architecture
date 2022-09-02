@@ -63,7 +63,10 @@ class CSBERT(nn.Module):
         sentence_embedding2 = self.linear(pooled2)
 
         embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 0)
-        prediction = self.softmax(embedding_concat)
+        print(embedding_concat.shape)
+        out_linear = self.linear(embedding_concat)
+        print(out_linear.shape)
+        prediction = self.softmax(out_linear)
 
         return prediction
 
