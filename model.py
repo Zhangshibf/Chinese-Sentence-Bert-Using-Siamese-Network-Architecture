@@ -14,6 +14,8 @@ def train_model(dataloader,model,optimizer,device):
     correct_pred = 0
 
     for batch in dataloader:
+        batch_size = len(batch)
+        print(batch_size)
         optimizer.zero_grad()
         instance = batch[0]
         mask = batch[1]
@@ -35,8 +37,8 @@ def train_model(dataloader,model,optimizer,device):
 
         correct_pred += calculate_correct_prediction(outputs,label)
 
-    avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
-    avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
+    avg_loss = total_loss / (len(dataloader)*batch_size)
+    avg_accuracy = correct_pred/(len(dataloader)*batch_size)
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
@@ -46,6 +48,7 @@ def evaluate_model(dataloader,model,device):
     correct_pred = 0
 
     for batch in dataloader:
+        batch_size = len(batch)
         instance = batch[0]
         mask = batch[1]
         label = batch[2]
@@ -62,13 +65,12 @@ def evaluate_model(dataloader,model,device):
         total_loss += loss
         correct_pred += calculate_correct_prediction(outputs,label)
 
-    avg_loss = total_loss / (len(dataloader)*len(dataloader[0]))
-    avg_accuracy = correct_pred/(len(dataloader)*len(dataloader[0]))
+    avg_loss = total_loss / (len(dataloader)*batch_size)
+    avg_accuracy = correct_pred/(len(dataloader)*batch_size)
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader):
-    device = torch.device('cuda:1')
+def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
     model.to(device)
     for k in epoch:
         print(("-----------------Epoch {}------------------".format(k)))
@@ -121,16 +123,21 @@ class CSBERT(nn.Module):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
-    parser.add_argument('--path',help = "path to the pickled dataset")
+    parser.add_argument('--train',help = "path to train")
+    parser.add_argument('--dev', help="path to dev")
+    parser.add_argument('--test', help="path to test")
     args = parser.parse_args()
 
-    with open(args.path, 'rb') as pickle_file:
-        data = pickle.load(pickle_file)
+    with open(args.train, 'rb') as pickle_file:
+        train_dataloader = pickle.load(pickle_file)
+    with open(args.dev, 'rb') as pickle_file:
+        dev_dataloader = pickle.load(pickle_file)
+    with open(args.test, 'rb') as pickle_file:
+        test_dataloader = pickle.load(pickle_file)
 
     epoch = 10
-    dataloader = data
-    print(len(dataloader))
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    device = torch.device('cuda:1')
 
-    train_model(dataloader, model, optimizer)
+    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device)
