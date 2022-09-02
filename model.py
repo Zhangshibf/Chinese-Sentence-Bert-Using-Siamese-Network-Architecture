@@ -117,6 +117,8 @@ if __name__ == "__main__":
     epoch = 10
     dataloader = data
     model = CSBERT()
+    print(model.parameters())
+    print(model.ParameterList())
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
     train_model(epoch, dataloader, model, optimizer)
