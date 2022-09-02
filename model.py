@@ -50,7 +50,7 @@ class CSBERT(nn.Module):
 #        if freeze !=0:
             #freeze bert layers here
 #        self.pooling = nn.AvgPool1d(768, stride=768)
-        self.linear = nn.Linear(75, out_features = 3)
+        self.linear = nn.Linear(768, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
 
     def forward(self,sent_id1,mask1,sent_id2,mask2):
