@@ -72,7 +72,7 @@ def evaluate_model(dataloader,model,device):
 
 def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
     model.to(device)
-    for k in epoch:
+    for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
         train_model(train_dataloader, model, optimizer,device)
