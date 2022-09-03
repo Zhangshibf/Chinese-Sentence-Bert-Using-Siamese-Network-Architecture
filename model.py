@@ -39,7 +39,7 @@ def train_model(dataloader,model,optimizer,device):
 
     avg_loss = total_loss / total_num
     avg_accuracy = correct_pred/total_num
-    #there is probably something wrong with the calculation of loss and accuracy... the accuracy got higher than 1.
+
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
@@ -91,8 +91,6 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
 #        evaluate_model(dev_dataloader, model, device1)
 #    print("-----------------Final Evaluation------------------")
 #    evaluate_model(test_dataloader, model, device1)
-
-    #add something here to save the model
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
