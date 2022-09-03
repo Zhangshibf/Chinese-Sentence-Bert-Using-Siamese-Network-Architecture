@@ -12,8 +12,9 @@ def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
+    n=0
     for batch in dataloader:
-        print(batch.shape)
+        n+=1
         optimizer.zero_grad()
         instance = batch[0]
         batch_size = instance.shape[0]
@@ -36,6 +37,7 @@ def train_model(dataloader,model,optimizer,device):
         optimizer.step()
 
         correct_pred += calculate_correct_prediction(outputs,label)
+    print(n)
     print(len(dataloader))
     print((len(dataloader)*batch_size))
     avg_loss = total_loss / (len(dataloader)*batch_size)
