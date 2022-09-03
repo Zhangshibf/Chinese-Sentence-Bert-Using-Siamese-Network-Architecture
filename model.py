@@ -18,7 +18,6 @@ def train_model(dataloader,model,optimizer,device):
         optimizer.zero_grad()
         instance = batch[0]
         batch_size = instance.shape[0]
-        print(batch_size)
         mask = batch[1]
         label = batch[2]
         one_hot_label = nn.functional.one_hot(label,num_classes = 3)
@@ -102,7 +101,6 @@ def calculate_correct_prediction(outputs,label):
     for i,j in zip(predictions,label):
         if i==j:
             n+=1
-    print("correct{}".format(n))
     return n
 class CSBERT(nn.Module):
     def __init__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
