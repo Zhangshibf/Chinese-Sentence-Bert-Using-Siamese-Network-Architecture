@@ -35,7 +35,10 @@ def train_model(dataloader,model,optimizer,device):
         loss.backward()
         optimizer.step()
 
-        correct_pred += calculate_correct_prediction(outputs,label)
+        correct = calculate_correct_prediction(outputs,label)
+        correct_pred+=correct
+
+    print(correct_pred)
     print(n)
     print(len(dataloader))
     print((len(dataloader)*batch_size))
