@@ -11,14 +11,13 @@ def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
-
+    total_num = 0
     for l,batch in enumerate(dataloader):
-
+        total_num+=len(batch)
         if l%100 == 0:
             seen = l*25
-
-
-            print("seen {}".format(seen))
+            print("actual seen {}".format(total_num))
+            print("estimated seen {}".format(seen))
             print("correct {}".format(correct_pred))
             if correct_pred>seen:
                 print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
