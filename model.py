@@ -85,6 +85,7 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
         #save checkpoint
         model_path = str("/home/CE/zhangshi/mygithubprojects/csbert"+"model"+str(k)+".pt")
         torch.save(optimizer.state_dict(), model_path)
+        print("Model saved, path is {}".format(model_path))
 #        print("-----------------Evaluating------------------")
 #        model.to(device1)
 #        evaluate_model(dev_dataloader, model, device1)
