@@ -18,7 +18,7 @@ def train_model(dataloader,model,optimizer,device):
             seen = l*25
 
 
-            print("seen {seen}".format(seen))
+            print("seen {}".format(seen))
             print("correct {}".format(correct_pred))
             if correct>seen:
                 print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
