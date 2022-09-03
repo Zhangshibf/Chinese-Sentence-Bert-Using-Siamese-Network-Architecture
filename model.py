@@ -12,7 +12,7 @@ def train_model(dataloader,model,optimizer,device):
     total_loss = 0
     correct_pred = 0
     total_num = 0
-    for l,batch in enumerate(dataloader):
+    for batch in dataloader:
         total_num+=len(batch[0])
         optimizer.zero_grad()
         instance = batch[0]
