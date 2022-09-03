@@ -43,6 +43,8 @@ def train_model(dataloader,model,optimizer,device):
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
+    return avg_loss,avg_accuracy
+
 def evaluate_model(dataloader,model,device):
     model.eval()
     loss_f = nn.CrossEntropyLoss()
@@ -75,17 +77,24 @@ def evaluate_model(dataloader,model,device):
         print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
 def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1):
-
+    loss_list = list()
+    accuracy_list = list()
     for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
         model.to(device0)
-        train_model(train_dataloader, model, optimizer,device0)
+        loss, acc = train_model(train_dataloader, model, optimizer,device0)
+        loss_list.append(loss)
+        accuracy_list.append(acc)
+
 
         #save checkpoint
         model_path = str("/home/CE/zhangshi/mygithubprojects/csbert/"+"model"+str(k)+".pt")
         torch.save(optimizer.state_dict(), model_path)
         print("Model saved, path is {}".format(model_path))
+
+    print(loss_list)
+    print(accuracy_list)
 #        print("-----------------Evaluating------------------")
 #        model.to(device1)
 #        evaluate_model(dev_dataloader, model, device1)
