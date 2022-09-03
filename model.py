@@ -20,7 +20,7 @@ def train_model(dataloader,model,optimizer,device):
 
             print("seen {}".format(seen))
             print("correct {}".format(correct_pred))
-            if correct>seen:
+            if correct_pred>seen:
                 print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         optimizer.zero_grad()
