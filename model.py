@@ -12,8 +12,8 @@ def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
-    print(dataloader.shape)
     for batch in dataloader:
+        print(batch.shape)
         optimizer.zero_grad()
         instance = batch[0]
         batch_size = instance.shape[0]
