@@ -4,7 +4,6 @@ import torch
 import argparse
 from torch import optim
 import pickle
-from dataloader import create_dataloader
 
 
 def train_model(dataloader,model,optimizer,device):
@@ -12,9 +11,13 @@ def train_model(dataloader,model,optimizer,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
-    n=0
-    for batch in dataloader:
-        n+=1
+
+    for l,batch in enumerate(dataloader):
+
+        if l%100 == 0:
+            print(correct_pred)
+            print(l)
+
         optimizer.zero_grad()
         instance = batch[0]
         batch_size = instance.shape[0]
@@ -39,11 +42,11 @@ def train_model(dataloader,model,optimizer,device):
         correct_pred+=correct
 
     print(correct_pred)
-    print(n)
-    print(len(dataloader))
     print((len(dataloader)*batch_size))
-    avg_loss = total_loss / (len(dataloader)*batch_size)
-    avg_accuracy = correct_pred/(len(dataloader)*batch_size)
+
+    data_num = (len(dataloader)*batch_size)
+    avg_loss = total_loss / data_num
+    avg_accuracy = correct_pred/data_num
     #there is probably something wrong with the calculation of loss and accuracy... the accuracy got higher than 1.
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
