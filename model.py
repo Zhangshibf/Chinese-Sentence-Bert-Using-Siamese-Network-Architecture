@@ -104,6 +104,11 @@ def calculate_correct_prediction(outputs,label):
     for i,j in zip(predictions,label):
         if i==j:
             n+=1
+    if n>25:
+        print("something wrong")
+        print(n)
+        print(predictions)
+        print(label)
     return n
 class CSBERT(nn.Module):
     def __init__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
