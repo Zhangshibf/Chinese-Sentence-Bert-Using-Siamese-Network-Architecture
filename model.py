@@ -15,7 +15,7 @@ def train_model(dataloader,model,optimizer,device):
     for l,batch in enumerate(dataloader):
         total_num+=len(batch[0])
         if l%100 == 0:
-            seen = l*25
+            seen = (l+1)*25
             print("actual seen {}".format(total_num))
             print("estimated seen {}".format(seen))
             print("correct {}".format(correct_pred))
