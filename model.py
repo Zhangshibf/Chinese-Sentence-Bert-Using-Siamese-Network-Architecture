@@ -15,8 +15,13 @@ def train_model(dataloader,model,optimizer,device):
     for l,batch in enumerate(dataloader):
 
         if l%100 == 0:
-            print(correct_pred)
-            print(l)
+            seen = l*25
+
+
+            print("seen {seen}".format(seen))
+            print("correct {}".format(correct_pred))
+            if correct>seen:
+                print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         optimizer.zero_grad()
         instance = batch[0]
