@@ -14,13 +14,7 @@ def train_model(dataloader,model,optimizer,device):
     total_num = 0
     for l,batch in enumerate(dataloader):
         total_num+=len(batch[0])
-        if l%100 == 0:
-            seen = (l+1)*25
-            print("actual seen {}".format(total_num))
-            print("estimated seen {}".format(seen))
-            print("correct {}".format(correct_pred))
-            if correct_pred>seen:
-                print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
 
         optimizer.zero_grad()
         instance = batch[0]
@@ -44,6 +38,14 @@ def train_model(dataloader,model,optimizer,device):
 
         correct = calculate_correct_prediction(outputs,label)
         correct_pred+=correct
+
+        if l%100 == 0:
+            seen = (l+1)*25
+            print("actual seen {}".format(total_num))
+            print("estimated seen {}".format(seen))
+            print("correct {}".format(correct_pred))
+            if correct_pred>seen:
+                print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     print(correct_pred)
     print(len(dataloader))
