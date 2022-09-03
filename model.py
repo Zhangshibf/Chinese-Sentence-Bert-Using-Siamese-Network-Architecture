@@ -14,11 +14,8 @@ def train_model(dataloader,model,optimizer,device):
     total_num = 0
     for l,batch in enumerate(dataloader):
         total_num+=len(batch[0])
-
-
         optimizer.zero_grad()
         instance = batch[0]
-        batch_size = instance.shape[0]
         mask = batch[1]
         label = batch[2]
         one_hot_label = nn.functional.one_hot(label,num_classes = 3)
@@ -47,14 +44,8 @@ def train_model(dataloader,model,optimizer,device):
             if correct_pred>seen:
                 print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-    print(correct_pred)
-    print(len(dataloader))
-    print(batch_size)
-    print((len(dataloader)*batch_size))
-
-    data_num = (len(dataloader)*batch_size)
-    avg_loss = total_loss / data_num
-    avg_accuracy = correct_pred/data_num
+    avg_loss = total_loss / total_num
+    avg_accuracy = correct_pred/total_num
     #there is probably something wrong with the calculation of loss and accuracy... the accuracy got higher than 1.
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
@@ -64,11 +55,12 @@ def evaluate_model(dataloader,model,device):
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
     correct_pred = 0
+    total_num = 0
 
     with torch.no_grad():
         for batch in dataloader:
+            total_num += len(batch[0])
             instance = batch[0]
-            batch_size = instance.shape[0]
             mask = batch[1]
             label = batch[2]
             one_hot_label = nn.functional.one_hot(label,num_classes = 3)
@@ -84,8 +76,8 @@ def evaluate_model(dataloader,model,device):
             total_loss += loss
             correct_pred += calculate_correct_prediction(outputs,label)
 
-        avg_loss = total_loss / (len(dataloader)*batch_size)
-        avg_accuracy = correct_pred/(len(dataloader)*batch_size)
+        avg_loss = total_loss / total_num
+        avg_accuracy = correct_pred/total_num
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
         print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
