@@ -36,13 +36,6 @@ def train_model(dataloader,model,optimizer,device):
         correct = calculate_correct_prediction(outputs,label)
         correct_pred+=correct
 
-        if l%100 == 0:
-            seen = (l+1)*25
-            print("actual seen {}".format(total_num))
-            print("estimated seen {}".format(seen))
-            print("correct {}".format(correct_pred))
-            if correct_pred>seen:
-                print("ATTENTION HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     avg_loss = total_loss / total_num
     avg_accuracy = correct_pred/total_num
