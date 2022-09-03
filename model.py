@@ -25,6 +25,7 @@ def train_model(dataloader,model,optimizer,device):
         optimizer.zero_grad()
         instance = batch[0]
         batch_size = instance.shape[0]
+        print(batch_size)
         mask = batch[1]
         label = batch[2]
         one_hot_label = nn.functional.one_hot(label,num_classes = 3)
@@ -46,6 +47,8 @@ def train_model(dataloader,model,optimizer,device):
         correct_pred+=correct
 
     print(correct_pred)
+    print(len(dataloader))
+    print(batch_size)
     print((len(dataloader)*batch_size))
 
     data_num = (len(dataloader)*batch_size)
