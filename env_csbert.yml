@@ -6,7 +6,5 @@ dependencies:
     - python==3.7.6
     - pip:
         - transformers == 4.21.1
-        - pandas
         - torch
         - sentence-transformers
-        - sklearn
