@@ -122,7 +122,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
 def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
     loss_list = list()
     accuracy_list = list()
-    for k in range(epoch):
+    for k in range(int(epoch)):
         print(("-----------------Model Saved at Epoch {}------------------".format(k)))
         print("-----------------Evaluating------------------")
         model = CSBERT()
