@@ -118,6 +118,12 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
 
     print(loss_list)
     print(accuracy_list)
+    with open("/home/CE/zhangshi/mygithubprojects/csbert/result.txt", "a") as f:
+        l = " ".join(loss_list)
+        a = " ".join(accuracy_list)
+        f.write(str(l+"\n"))
+        f.write(a)
+        f.close()
 
 def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
     loss_list = list()
