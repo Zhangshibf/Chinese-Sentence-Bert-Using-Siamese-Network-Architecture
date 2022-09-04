@@ -178,8 +178,8 @@ class CSBERT(nn.Module):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
-    parse = argparse.add_argument("--epoch",help = "the number of epoch")
-    parse = argparse.add_argument("--mp", help="path of the folder that contains saved model")
+    parser.add_argument("--epoch",help = "the number of epoch")
+    parser.add_argument("--mp", help="path of the folder that contains saved model")
     parser.add_argument('--dev', help="path to dev")
     args = parser.parse_args()
 
