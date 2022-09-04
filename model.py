@@ -215,4 +215,5 @@ if __name__ == "__main__":
     device1 = torch.device('cuda:1')
     device0 = torch.device('cuda:0')
 
-    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
+    train_and_save_model(epoch, model, optimizer, train_dataloader, device1)
+#    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
