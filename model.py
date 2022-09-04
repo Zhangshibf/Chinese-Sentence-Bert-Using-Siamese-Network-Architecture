@@ -176,7 +176,7 @@ class CSBERT(nn.Module):
 
         return prediction
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument("--epoch",help = "the number of epoch")
     parser.add_argument("--mp", help="path of the folder that contains saved model")
@@ -191,10 +191,10 @@ if __name__ == "__main__":
     device2 = torch.device('cuda:2')
     device3 = torch.device('cuda:3')
 
-    evaluate_saved_model(args.epoch, args.mp,dev_dataloader,device1)
+    evaluate_saved_model(args.epoch, args.mp,dev_dataloader,device1)"""
 
 
-"""if __name__ == "__main__":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--train',help = "path to train")
     parser.add_argument('--dev', help="path to dev")
@@ -208,11 +208,10 @@ if __name__ == "__main__":
     with open(args.test, 'rb') as pickle_file:
         test_dataloader = pickle.load(pickle_file)
 
-    epoch = 30
+    epoch = 50
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     device1 = torch.device('cuda:1')
     device0 = torch.device('cuda:0')
 
     train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
-"""
