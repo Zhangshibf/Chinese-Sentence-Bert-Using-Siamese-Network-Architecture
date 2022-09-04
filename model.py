@@ -94,6 +94,12 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
 
     print(loss_list)
     print(accuracy_list)
+    with open("/home/CE/zhangshi/mygithubprojects/csbert/result.txt", "a") as f:
+        l = " ".join(loss_list)
+        a = " ".join(accuracy_list)
+        f.write(str(l+"\n"))
+        f.write(a)
+        f.close()
 #        print("-----------------Evaluating------------------")
 #        model.to(device1)
 #        evaluate_model(dev_dataloader, model, device1)
@@ -215,5 +221,5 @@ if __name__ == "__main__":
     device1 = torch.device('cuda:1')
     device0 = torch.device('cuda:0')
 
-    train_and_save_model(epoch, model, optimizer, train_dataloader, device1)
-#    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
+#    train_and_save_model(epoch, model, optimizer, train_dataloader, device1)
+    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
