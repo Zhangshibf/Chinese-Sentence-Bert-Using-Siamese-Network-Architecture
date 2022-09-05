@@ -107,7 +107,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
         model.to(device0)
-        loss, acc = train_model(train_dataloader, model, optimizer,device,save_model=True)
+        loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
         loss_list.append(loss.tolist()[0])
         accuracy_list.append(acc)
 
