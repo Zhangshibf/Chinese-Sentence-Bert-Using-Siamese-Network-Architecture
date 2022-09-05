@@ -28,8 +28,6 @@ def train_model(k,dataloader,model,optimizer,device,save_model = False):
         outputs = model(instance1,mask1,instance2,mask2)
         one_hot_label = one_hot_label.float().to(device)
         loss = loss_f(outputs, one_hot_label)
-        print(loss.tolist())
-        print(type(loss.tolist()))
         total_loss += loss
 
         loss.backward()
