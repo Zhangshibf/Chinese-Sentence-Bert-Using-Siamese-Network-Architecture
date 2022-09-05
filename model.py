@@ -6,7 +6,7 @@ from torch import optim
 import pickle
 
 
-def train_model(dataloader,model,optimizer,device):
+def train_model(k,dataloader,model,optimizer,device,save_model = False):
     model.train()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
@@ -36,12 +36,16 @@ def train_model(dataloader,model,optimizer,device):
         correct = calculate_correct_prediction(outputs,label)
         correct_pred+=correct
 
-
     avg_loss = total_loss / total_num
     avg_accuracy = correct_pred/total_num
 
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
+
+    if save_model==True:
+        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert/" + "model" + str(k) + ".pt")
+        torch.save(model.state_dict(), model_path)
+        print("Model saved, path is {}".format(model_path))
 
     return avg_loss,avg_accuracy
 
@@ -76,35 +80,25 @@ def evaluate_model(dataloader,model,device):
         print(("-----------------Average Loss {}------------------".format(avg_loss)))
         print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1):
+        return avg_loss, avg_accuracy
+
+def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
     loss_list = list()
     accuracy_list = list()
     for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
-        model.to(device0)
-        loss, acc = train_model(train_dataloader, model, optimizer,device0)
-        loss_list.append(loss)
+        model.to(device)
+        loss, acc = train_model(k,train_dataloader, model, optimizer,device)
+        loss_list.append(loss.tolist()[0])
         accuracy_list.append(acc)
-
-        #save checkpoint
-        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert/"+"model"+str(k)+".pt")
-        torch.save(optimizer.state_dict(), model_path)
-        print("Model saved, path is {}".format(model_path))
+        print("-----------------Evaluating------------------")
+        evaluate_model(dev_dataloader, model, device)
 
     print(loss_list)
     print(accuracy_list)
-    with open("/home/CE/zhangshi/mygithubprojects/csbert/result.txt", "a") as f:
-        l = " ".join(loss_list)
-        a = " ".join(accuracy_list)
-        f.write(str(l+"\n"))
-        f.write(a)
-        f.close()
-#        print("-----------------Evaluating------------------")
-#        model.to(device1)
-#        evaluate_model(dev_dataloader, model, device1)
-#    print("-----------------Final Evaluation------------------")
-#    evaluate_model(test_dataloader, model, device1)
+    print("-----------------Final Evaluation------------------")
+    evaluate_model(test_dataloader, model, device)
 
 def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
     loss_list = list()
@@ -113,17 +107,13 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
         model.to(device0)
-        loss, acc = train_model(train_dataloader, model, optimizer,device)
-        loss_list.append(loss)
+        loss, acc = train_model(train_dataloader, model, optimizer,device,save_model=True)
+        loss_list.append(loss.tolist()[0])
         accuracy_list.append(acc)
-
-        #save checkpoint
-        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert/"+"model"+str(k)+".pt")
-        torch.save(optimizer.state_dict(), model_path)
-        print("Model saved, path is {}".format(model_path))
 
     print(loss_list)
     print(accuracy_list)
+
     with open("/home/CE/zhangshi/mygithubprojects/csbert/result.txt", "a") as f:
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
@@ -183,23 +173,6 @@ class CSBERT(nn.Module):
 
         return prediction
 
-"""if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Test the code')
-    parser.add_argument("--epoch",help = "the number of epoch")
-    parser.add_argument("--mp", help="path of the folder that contains saved model")
-    parser.add_argument('--dev', help="path to dev")
-    args = parser.parse_args()
-
-    with open(args.dev, 'rb') as pickle_file:
-        dev_dataloader = pickle.load(pickle_file)
-
-    device0 = torch.device('cuda:0')
-    device1 = torch.device('cuda:1')
-    device2 = torch.device('cuda:2')
-    device3 = torch.device('cuda:3')
-
-    evaluate_saved_model(args.epoch, args.mp,dev_dataloader,device1)"""
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
@@ -215,11 +188,13 @@ if __name__ == "__main__":
     with open(args.test, 'rb') as pickle_file:
         test_dataloader = pickle.load(pickle_file)
 
-    epoch = 50
+    epoch = 200
     model = CSBERT()
     optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    device1 = torch.device('cuda:1')
     device0 = torch.device('cuda:0')
+    device1 = torch.device('cuda:1')
+    device2 = torch.device('cuda:2')
+    device3 = torch.device('cuda:3')
 
-#    train_and_save_model(epoch, model, optimizer, train_dataloader, device1)
-    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
+    train_and_save_model(epoch,model,optimizer,train_dataloader,device0)
+#    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
