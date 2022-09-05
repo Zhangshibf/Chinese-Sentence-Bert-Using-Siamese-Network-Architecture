@@ -28,6 +28,8 @@ def train_model(k,dataloader,model,optimizer,device,save_model = False):
         outputs = model(instance1,mask1,instance2,mask2)
         one_hot_label = one_hot_label.float().to(device)
         loss = loss_f(outputs, one_hot_label)
+        print(loss.tolist())
+        print(type(loss.tolist()))
         total_loss += loss
 
         loss.backward()
@@ -90,7 +92,7 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
         print("-----------------Training------------------")
         model.to(device)
         loss, acc = train_model(k,train_dataloader, model, optimizer,device)
-        loss_list.append(loss.tolist()[0])
+        loss_list.append(loss.tolist())
         accuracy_list.append(acc)
         print("-----------------Evaluating------------------")
         evaluate_model(dev_dataloader, model, device)
@@ -108,7 +110,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         print("-----------------Training------------------")
         model.to(device0)
         loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
-        loss_list.append(loss.tolist()[0])
+        loss_list.append(loss.tolist())
         accuracy_list.append(acc)
 
     print(loss_list)
@@ -132,11 +134,20 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
         model.load_state_dict(torch.load(path))
         model.to(device)
         loss, acc = evaluate_model(dev_dataloader, model, device0)
-        loss_list.append(loss)
+        loss_list.append(loss.tolist())
         accuracy_list.append(acc)
 
     print(loss_list)
     print(accuracy_list)
+    #find max of accuracy list
+    with open("/home/CE/zhangshi/mygithubprojects/csbert/dev_result.txt", "a") as f:
+        l = " ".join(loss_list)
+        a = " ".join(accuracy_list)
+        f.write(str(l+"\n"))
+        f.write(a)
+        f.close()
+
+    return best_performance_model
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
@@ -174,19 +185,13 @@ class CSBERT(nn.Module):
         return prediction
 
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--train',help = "path to train")
-#    parser.add_argument('--dev', help="path to dev")
-#    parser.add_argument('--test', help="path to test")
     args = parser.parse_args()
 
     with open(args.train, 'rb') as pickle_file:
         train_dataloader = pickle.load(pickle_file)
-#    with open(args.dev, 'rb') as pickle_file:
-#        dev_dataloader = pickle.load(pickle_file)
-#    with open(args.test, 'rb') as pickle_file:
-#        test_dataloader = pickle.load(pickle_file)
 
     epoch = 200
     model = CSBERT()
@@ -197,4 +202,21 @@ if __name__ == "__main__":
     device3 = torch.device('cuda:3')
 
     train_and_save_model(epoch=epoch,model=model,optimizer=optimizer,train_dataloader=train_dataloader,device=device0)
-#    train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device0,device1)
+    """
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Test the code')
+    parser.add_argument('--dev', help="path to dev")
+    parser.add_argument('--test', help="path to test")
+    args = parser.parse_args()
+
+    with open(args.dev, 'rb') as pickle_file:
+        dev_dataloader = pickle.load(pickle_file)
+
+    epoch = 200
+    device0 = torch.device('cuda:0')
+    device1 = torch.device('cuda:1')
+    device2 = torch.device('cuda:2')
+    device3 = torch.device('cuda:3')
+
+    best_performance_model = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/result.txt",dev_dataloader=dev_dataloader,device=device0)
