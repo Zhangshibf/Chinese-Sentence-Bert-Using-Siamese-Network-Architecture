@@ -185,7 +185,7 @@ class CSBERT(nn.Module):
         return prediction
 
 
-"""if __name__ == "__main__":
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--train',help = "path to train")
     args = parser.parse_args()
@@ -202,8 +202,8 @@ class CSBERT(nn.Module):
     device3 = torch.device('cuda:3')
 
     train_and_save_model(epoch=epoch,model=model,optimizer=optimizer,train_dataloader=train_dataloader,device=device0)
-    """
 
+"""
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--dev', help="path to dev")
@@ -220,3 +220,4 @@ if __name__ == "__main__":
     device3 = torch.device('cuda:3')
 
     best_performance_model = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/result.txt",dev_dataloader=dev_dataloader,device=device0)
+    """
