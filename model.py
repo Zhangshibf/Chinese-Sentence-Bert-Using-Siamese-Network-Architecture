@@ -4,6 +4,7 @@ import torch
 import argparse
 from torch import optim
 import pickle
+import numpy as np
 
 
 def train_model(k,dataloader,model,optimizer,device,save_model = False):
@@ -137,7 +138,7 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
 
     print(loss_list)
     print(accuracy_list)
-    #find max of accuracy list
+
     with open("/home/CE/zhangshi/mygithubprojects/csbert/dev_result.txt", "a") as f:
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
@@ -145,7 +146,12 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
         f.write(a)
         f.close()
 
-    return best_performance_model
+    #find max of accuracy list
+    ind = np.argmax(accuracy_list)
+    print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
+    best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
+
+    return best_performance_model_path
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
@@ -182,7 +188,7 @@ class CSBERT(nn.Module):
 
         return prediction
 
-
+"""
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--train',help = "path to train")
@@ -201,7 +207,7 @@ if __name__ == "__main__":
 
     train_and_save_model(epoch=epoch,model=model,optimizer=optimizer,train_dataloader=train_dataloader,device=device0)
 
-"""
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--dev', help="path to dev")
@@ -210,6 +216,8 @@ if __name__ == "__main__":
 
     with open(args.dev, 'rb') as pickle_file:
         dev_dataloader = pickle.load(pickle_file)
+    with open(args.test, 'rb') as pickle_file:
+        test_dataloader = pickle.load(pickle_file)
 
     epoch = 200
     device0 = torch.device('cuda:0')
@@ -217,5 +225,13 @@ if __name__ == "__main__":
     device2 = torch.device('cuda:2')
     device3 = torch.device('cuda:3')
 
-    best_performance_model = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/result.txt",dev_dataloader=dev_dataloader,device=device0)
+    best_model_path = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/result.txt",dev_dataloader=dev_dataloader,device=device0)
+
+    print("-----------------Evaluating on Test set------------------")
+    model = CSBERT()
+    model.load_state_dict(torch.load(best_model_path))
+    model.to(device0)
+    loss, acc = evaluate_model(test_dataloader, model, device0)
+    
+    print("----------------------Accuracy on Test set {}-----------------------------------".format(acc))
     """
