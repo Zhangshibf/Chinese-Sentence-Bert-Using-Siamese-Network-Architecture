@@ -29,5 +29,5 @@ if __name__ == "__main__":
     best_model.load_state_dict(torch.load(best_model_path))
     best_model.to(device)
     loss, acc = model.evaluate_model(test_dataloader, best_model, device)
-
+    print("----------------------Loss on Test set {}-----------------------------------".format(loss))
     print("----------------------Accuracy on Test set {}-----------------------------------".format(acc))

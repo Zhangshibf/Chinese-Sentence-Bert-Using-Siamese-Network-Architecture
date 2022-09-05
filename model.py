@@ -143,7 +143,7 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
         f.write(str(l+"\n"))
-        f.write(a)
+        f.write(str(a+"\n"))
         f.close()
 
     #find max of accuracy list
