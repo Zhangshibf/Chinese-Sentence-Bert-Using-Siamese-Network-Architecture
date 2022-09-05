@@ -133,8 +133,8 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
         model.load_state_dict(torch.load(path))
         model.to(device)
         loss, acc = evaluate_model(dev_dataloader, model, device)
-        loss_list.append(loss.tolist())
-        accuracy_list.append(acc)
+        loss_list.append(str(loss.tolist()))
+        accuracy_list.append(str(acc))
 
     print(loss_list)
     print(accuracy_list)
