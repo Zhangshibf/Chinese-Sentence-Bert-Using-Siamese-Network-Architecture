@@ -177,16 +177,16 @@ class CSBERT(nn.Module):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Test the code')
     parser.add_argument('--train',help = "path to train")
-    parser.add_argument('--dev', help="path to dev")
-    parser.add_argument('--test', help="path to test")
+#    parser.add_argument('--dev', help="path to dev")
+#    parser.add_argument('--test', help="path to test")
     args = parser.parse_args()
 
     with open(args.train, 'rb') as pickle_file:
         train_dataloader = pickle.load(pickle_file)
-    with open(args.dev, 'rb') as pickle_file:
-        dev_dataloader = pickle.load(pickle_file)
-    with open(args.test, 'rb') as pickle_file:
-        test_dataloader = pickle.load(pickle_file)
+#    with open(args.dev, 'rb') as pickle_file:
+#        dev_dataloader = pickle.load(pickle_file)
+#    with open(args.test, 'rb') as pickle_file:
+#        test_dataloader = pickle.load(pickle_file)
 
     epoch = 200
     model = CSBERT()
