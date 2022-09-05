@@ -107,7 +107,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
     for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
-        model.to(device0)
+        model.to(device)
         loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
         loss_list.append(loss.tolist())
         accuracy_list.append(acc)
@@ -132,7 +132,7 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
         path = str(model_path+"model"+str(k)+".pt")
         model.load_state_dict(torch.load(path))
         model.to(device)
-        loss, acc = evaluate_model(dev_dataloader, model, device0)
+        loss, acc = evaluate_model(dev_dataloader, model, device)
         loss_list.append(loss.tolist())
         accuracy_list.append(acc)
 
