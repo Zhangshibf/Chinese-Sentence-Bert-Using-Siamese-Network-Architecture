@@ -20,7 +20,7 @@ if __name__ == "__main__":
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
 
-    epoch = 200 #remember to change here
+    epoch = 54 #remember to change here
     best_model_path = model.evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/"
                                            ,dev_dataloader=dev_dataloader ,device=device)
 
