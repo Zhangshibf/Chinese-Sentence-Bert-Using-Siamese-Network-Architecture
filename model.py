@@ -44,7 +44,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model = False):
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
     if save_model==True:
-        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert/" + "model" + str(k) + ".pt")
+        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert_second/" + "model" + str(k) + ".pt")
         torch.save(model.state_dict(), model_path)
         print("Model saved, path is {}".format(model_path))
 
@@ -115,7 +115,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
     print(loss_list)
     print(accuracy_list)
 
-    with open("/home/CE/zhangshi/mygithubprojects/csbert/result.txt", "a") as f:
+    with open("/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt", "a") as f:
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
         f.write(str(l+"\n"))
@@ -139,7 +139,7 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
     print(loss_list)
     print(accuracy_list)
 
-    with open("/home/CE/zhangshi/mygithubprojects/csbert/dev_result.txt", "a") as f:
+    with open("/home/CE/zhangshi/mygithubprojects/csbert_second/dev_result.txt", "a") as f:
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
         f.write(str(l+"\n"))
@@ -225,7 +225,7 @@ if __name__ == "__main__":
     device2 = torch.device('cuda:2')
     device3 = torch.device('cuda:3')
 
-    best_model_path = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/result.txt",dev_dataloader=dev_dataloader,device=device0)
+    best_model_path = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt",dev_dataloader=dev_dataloader,device=device0)
 
     print("-----------------Evaluating on Test set------------------")
     model = CSBERT()
