@@ -93,7 +93,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
         loss_list.append(str(loss.tolist()))
         accuracy_list.append(acc)
-        with open("/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt", "a") as f:
+        with open("/home/CE/zhangshi/mygithubprojects/csbert_second/train_result.txt", "a") as f:
             f.write(str(loss + "\n"))
             f.write(acc + "\n")
             f.close()
