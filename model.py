@@ -82,25 +82,7 @@ def evaluate_model(dataloader,model,device):
         print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
         return avg_loss, avg_accuracy
-"""
-def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
-    loss_list = list()
-    accuracy_list = list()
-    for k in range(epoch):
-        print(("-----------------Epoch {}------------------".format(k)))
-        print("-----------------Training------------------")
-        model.to(device)
-        loss, acc = train_model(k,train_dataloader, model, optimizer,device)
-        loss_list.append(loss.tolist())
-        accuracy_list.append(acc)
-        print("-----------------Evaluating------------------")
-        evaluate_model(dev_dataloader, model, device)
 
-    print(loss_list)
-    print(accuracy_list)
-    print("-----------------Final Evaluation------------------")
-    evaluate_model(test_dataloader, model, device)
-"""
 def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
     loss_list = list()
     accuracy_list = list()
@@ -111,16 +93,15 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
         loss_list.append(str(loss.tolist()))
         accuracy_list.append(acc)
+        with open("/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt", "a") as f:
+            f.write(str(loss + "\n"))
+            f.write(acc + "\n")
+            f.close()
 
     print(loss_list)
     print(accuracy_list)
 
-    with open("/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt", "a") as f:
-        l = " ".join(loss_list)
-        a = " ".join(accuracy_list)
-        f.write(str(l+"\n"))
-        f.write(a)
-        f.close()
+
 
 def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
     loss_list = list()
