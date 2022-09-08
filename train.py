@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     epoch = 200
     csbert_model = model.CSBERT()
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    optimizer = optim.SGD(csbert_model.parameters(), lr=0.001, momentum=0.9)
     device_str = "cuda:"+str(args.device)
     device = torch.device(device_str)
 
