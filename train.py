@@ -2,6 +2,7 @@ import argparse
 import pickle
 import model
 import torch
+from torch import optim
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Train the model')
@@ -13,9 +14,9 @@ if __name__ == "__main__":
         train_dataloader = pickle.load(pickle_file)
 
     epoch = 200
-    model = model.CSBERT()
-    optimizer = model.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    csbert_model = model.CSBERT()
+    optimizer = optim.SGD(csbert_model.parameters(), lr=0.001, momentum=0.9)
     device_str = "cuda:"+str(args.device)
     device = torch.device(device_str)
 
-    model.train_and_save_model(epoch,model,optimizer,train_dataloader,device)
+    model.train_and_save_model(epoch,csbert_model,optimizer,train_dataloader,device)
