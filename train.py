@@ -13,9 +13,9 @@ if __name__ == "__main__":
         train_dataloader = pickle.load(pickle_file)
 
     epoch = 200
-    model = model.CSBERT()
+    csbert_model = model.CSBERT()
     optimizer = model.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
     device_str = "cuda:"+str(args.device)
     device = torch.device(device_str)
 
-    model.train_and_save_model(epoch,model,optimizer,train_dataloader,device)
+    model.train_and_save_model(epoch,csbert_model,optimizer,train_dataloader,device)
