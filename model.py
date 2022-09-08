@@ -82,7 +82,7 @@ def evaluate_model(dataloader,model,device):
         print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
         return avg_loss, avg_accuracy
-
+"""
 def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,test_dataloader,device):
     loss_list = list()
     accuracy_list = list()
@@ -100,7 +100,7 @@ def train_and_evaluate(epoch,model,optimizer,train_dataloader,dev_dataloader,tes
     print(accuracy_list)
     print("-----------------Final Evaluation------------------")
     evaluate_model(test_dataloader, model, device)
-
+"""
 def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
     loss_list = list()
     accuracy_list = list()
