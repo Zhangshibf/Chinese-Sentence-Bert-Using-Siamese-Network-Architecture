@@ -96,7 +96,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         loss_list.append(loss)
         accuracy_list.append(acc)
         with open("/home/CE/zhangshi/mygithubprojects/csbert_second/train_result.txt", "a") as f:
-            f.write(str("Epoch "+k))
+            f.write(str("Epoch "+str(k)))
             f.write(str("loss: "+loss + "\n"))
             f.write("accuracy: "+acc + "\n")
             f.close()
