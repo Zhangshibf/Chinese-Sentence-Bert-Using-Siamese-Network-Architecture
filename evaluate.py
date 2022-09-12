@@ -21,7 +21,7 @@ if __name__ == "__main__":
     device = torch.device(device_str)
 
     epoch = 180 #remember to change here
-    best_model_path = model.evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert/"
+    best_model_path = model.evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert_second/"
                                            ,dev_dataloader=dev_dataloader ,device=device)
 
     print("-----------------Evaluating on Test set------------------")
