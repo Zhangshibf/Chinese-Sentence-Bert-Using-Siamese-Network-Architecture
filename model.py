@@ -44,7 +44,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model = False):
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
     if save_model==True:
-        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert_second/" + "model" + str(k) + ".pt")
+        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert_macbert/" + "model" + str(k) + ".pt")
         torch.save(model.state_dict(), model_path)
         print("Model saved, path is {}".format(model_path))
 
@@ -95,7 +95,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
         acc = str(acc)
         loss_list.append(loss)
         accuracy_list.append(acc)
-        with open("/home/CE/zhangshi/mygithubprojects/csbert_second/train_result.txt", "a") as f:
+        with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/train_result.txt", "a") as f:
             f.write(str("Epoch "+str(k)))
             f.write(str("loss: "+loss + "\n"))
             f.write("accuracy: "+acc + "\n")
@@ -123,7 +123,7 @@ def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
     print(loss_list)
     print(accuracy_list)
 
-    with open("/home/CE/zhangshi/mygithubprojects/csbert_second/dev_result.txt", "a") as f:
+    with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/dev_result.txt", "a") as f:
         l = " ".join(loss_list)
         a = " ".join(accuracy_list)
         f.write(str(l+"\n"))
