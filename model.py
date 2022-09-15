@@ -146,7 +146,7 @@ def calculate_correct_prediction(outputs,label):
             n+=1
     return n
 class CSBERT(nn.Module):
-    def __init__(self,model_name = "hfl/chinese-bert-wwm",pooling = "mean",freeze=0):
+    def __init__(self,model_name ,pooling = "mean",freeze=0):
         super(CSBERT, self).__init__()
 
         self.bert = transformers.BertModel.from_pretrained(model_name)
@@ -168,51 +168,3 @@ class CSBERT(nn.Module):
         prediction = self.softmax(out_linear)
 
         return prediction
-
-"""
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Test the code')
-    parser.add_argument('--train',help = "path to train")
-    args = parser.parse_args()
-
-    with open(args.train, 'rb') as pickle_file:
-        train_dataloader = pickle.load(pickle_file)
-
-    epoch = 200
-    model = CSBERT()
-    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    device0 = torch.device('cuda:0')
-    device1 = torch.device('cuda:1')
-    device2 = torch.device('cuda:2')
-    device3 = torch.device('cuda:3')
-
-    train_and_save_model(epoch=epoch,model=model,optimizer=optimizer,train_dataloader=train_dataloader,device=device0)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Test the code')
-    parser.add_argument('--dev', help="path to dev")
-    parser.add_argument('--test', help="path to test")
-    args = parser.parse_args()
-
-    with open(args.dev, 'rb') as pickle_file:
-        dev_dataloader = pickle.load(pickle_file)
-    with open(args.test, 'rb') as pickle_file:
-        test_dataloader = pickle.load(pickle_file)
-
-    epoch = 200
-    device0 = torch.device('cuda:0')
-    device1 = torch.device('cuda:1')
-    device2 = torch.device('cuda:2')
-    device3 = torch.device('cuda:3')
-
-    best_model_path = evaluate_saved_model(epoch,model_path="/home/CE/zhangshi/mygithubprojects/csbert_second/result.txt",dev_dataloader=dev_dataloader,device=device0)
-
-    print("-----------------Evaluating on Test set------------------")
-    model = CSBERT()
-    model.load_state_dict(torch.load(best_model_path))
-    model.to(device0)
-    loss, acc = evaluate_model(test_dataloader, model, device0)
-    
-    print("----------------------Accuracy on Test set {}-----------------------------------".format(acc))
-    """

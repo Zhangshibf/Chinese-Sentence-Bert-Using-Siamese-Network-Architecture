@@ -1,7 +1,7 @@
 import torch
 import transformers
 import json
-from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
+from torch.utils.data import TensorDataset, DataLoader, RandomSampler
 import argparse
 import pickle
 
@@ -29,10 +29,10 @@ def load_data(data_path):
     else:
         raise Exception("Check your code.")
 
-def create_dataloader(data_path,batch_size = 25):
+def create_dataloader(data_path,model_name ="hfl/chinese-bert-wwm", batch_size = 25):
     sentences,label = load_data(data_path)
 
-    tokenizer = transformers.BertTokenizer.from_pretrained("hfl/chinese-bert-wwm")
+    tokenizer = transformers.BertTokenizer.from_pretrained(model_name)
     tokens = tokenizer.batch_encode_plus(sentences, padding=True, return_token_type_ids=False)
     sentences = tokens['input_ids']
     masks = tokens['attention_mask']
@@ -67,8 +67,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create the dataloader and pickle it.')
     parser.add_argument('--i',help = "path to the train/dev/test set")
     parser.add_argument('--o',help = "path to save the pickled dataloader of train/dev/test set")
+    parser.add_argument('--model_name', help="use 'hfl/chinese-macbert-base' for MacBert, 'hfl/chinese-bert-wwm' for bert-wwm. Default bert-wwm",
+                        default="hfl/chinese-bert-wwm")
     args = parser.parse_args()
-    dataloader = create_dataloader(args.i)
+    dataloader = create_dataloader(args.i,args.model_name)
 
     with open(args.o, 'wb') as f:
         pickle.dump(dataloader, f)
