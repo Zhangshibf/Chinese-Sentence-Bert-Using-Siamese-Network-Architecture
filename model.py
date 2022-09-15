@@ -150,9 +150,6 @@ class CSBERT(nn.Module):
         super(CSBERT, self).__init__()
 
         self.bert = transformers.BertModel.from_pretrained(model_name)
-#        if freeze !=0:
-            #freeze bert layers here
-#        self.pooling = nn.AvgPool1d(768, stride=768)
         self.linear1 = nn.Linear(768, out_features = 300)
         self.linear2 = nn.Linear(900, out_features = 3)
         self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
