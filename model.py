@@ -134,12 +134,12 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_pa
     print(loss_list)
     print(accuracy_list)
 
-def evaluate_saved_model(epoch,model_path,dev_dataloader,device,outpath):
+def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpath):
     pearsons = list()
     for k in range(int(epoch)):
         print(("-----------------Model Saved at Epoch {}------------------".format(k)))
         print("-----------------Evaluating------------------")
-        model = CSBERT()
+        model = CSBERT(model_name)
         path = str(model_path+"model"+str(k)+".pt")
         model.load_state_dict(torch.load(path))
         model.to(device)
