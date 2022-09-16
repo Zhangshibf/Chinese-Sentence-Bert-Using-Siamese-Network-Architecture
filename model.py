@@ -163,7 +163,7 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
         model.load_state_dict(torch.load(path))
         model.to(device)
         r = evaluate_model_cosine_similarity(dev_dataloader, model, device)
-        spearman_r.append(r)
+        spearman_r.append(str(r))
         rs = " ".join(spearman_r)
         with open(str(outpath+"dev_result.txt"), "a") as f:
             f.write((str(k)+"\n"))
