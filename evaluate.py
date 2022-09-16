@@ -11,6 +11,8 @@ if __name__ == "__main__":
     parser.add_argument('--device', help="cuda number")
     parser.add_argument('--model_path', help="path to save the result")
     parser.add_argument('--outpath', help="path to save the output")
+    parser.add_argument('--model_name', help="hfl/chinese-macbert-base for MacBert, default bert-wwm",
+                        default="hfl/chinese-bert-wwm")
     args = parser.parse_args()
 
     with open(args.dev, 'rb') as pickle_file:
@@ -26,7 +28,7 @@ if __name__ == "__main__":
                                            ,dev_dataloader=dev_dataloader ,device=device,outpath = args.outpath)
 
     print("-----------------Evaluating on Test set------------------")
-    best_model = model.CSBERT()
+    best_model = model.CSBERT(model_name=args.model_name)
     best_model.load_state_dict(torch.load(best_model_path))
     best_model.to(device)
     loss, acc = model.evaluate_model(test_dataloader, best_model, device)
