@@ -96,6 +96,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             instance = batch[0]
             mask = batch[1]
             label = batch[2]
+            print(label)
             labels.append((int(label)-1))
             instance1 = instance[:,0,:].to(device)
             instance2 = instance[:,1,:].to(device)
