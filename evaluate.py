@@ -9,7 +9,8 @@ if __name__ == "__main__":
     parser.add_argument('--dev', help="path to dev")
     parser.add_argument('--test', help="path to test")
     parser.add_argument('--device', help="cuda number")
-    parser.add_argument('--path', help="path to save the result")
+    parser.add_argument('--model_path', help="path to save the result")
+    parser.add_argument('--outpath', help="path to save the output")
     args = parser.parse_args()
 
     with open(args.dev, 'rb') as pickle_file:
@@ -20,10 +21,9 @@ if __name__ == "__main__":
 
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
-    outpath = args.path
     epoch = 180 #remember to change here
-    best_model_path = model.evaluate_saved_model(epoch,model_path=args.path
-                                           ,dev_dataloader=dev_dataloader ,device=device,outpath = outpath)
+    best_model_path = model.evaluate_saved_model(epoch,model_path=args.model_path
+                                           ,dev_dataloader=dev_dataloader ,device=device,outpath = args.outpath)
 
     print("-----------------Evaluating on Test set------------------")
     best_model = model.CSBERT()
