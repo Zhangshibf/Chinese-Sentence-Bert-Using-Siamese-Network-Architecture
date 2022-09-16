@@ -104,10 +104,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
 
             embedding1 = model.generate_sentence_embedding(instance1,mask1)
             embedding2 = model.generate_sentence_embedding(instance2,mask2)
-#            print(embedding1)
-#            print(embedding2)
-            similarity = nn.functional.cosine_similarity(embedding1,embedding2)#check dim
-            print(similarity)
+            similarity = nn.functional.cosine_similarity(embedding1,embedding2)
             similarity_scores.append(similarity)
 
     label = label.to("cpu")
