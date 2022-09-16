@@ -107,7 +107,6 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             similarity = nn.functional.cosine_similarity(embedding1,embedding2)
             similarity_scores.append(similarity)
 
-    label = label.to("cpu")
     #calculate pearson's correlation score
     pearson = np.corrcoef(np.array(similarity_scores), np.array(label))
     print(("-----------------Pearson's correlation coefficient is {}------------------".format(pearson)))
