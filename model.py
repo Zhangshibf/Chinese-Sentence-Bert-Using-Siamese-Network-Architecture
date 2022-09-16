@@ -89,15 +89,14 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
     model.eval()
     total_num = 0
     similarity_scores = list()
-    labels = list()
     with torch.no_grad():
         for batch in dataloader:
             total_num += len(batch[0])
             instance = batch[0]
             mask = batch[1]
             label = batch[2]
-            print(label)
-            labels.append((int(label)-1))
+            label = label.tolist()
+            label = [int(i)-1 for i in label]
             instance1 = instance[:,0,:].to(device)
             instance2 = instance[:,1,:].to(device)
             mask1 = mask[:,0,:].to(device)
@@ -109,7 +108,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             similarity_scores.append(similarity)
 
     #calculate pearson's correlation score
-    pearson = np.corrcoef(np.array(similarity_scores), np.array(labels))
+    pearson = np.corrcoef(np.array(similarity_scores), np.array(label))
     print(("-----------------Pearson's correlation coefficient is {}------------------".format(pearson)))
     return pearson
 
