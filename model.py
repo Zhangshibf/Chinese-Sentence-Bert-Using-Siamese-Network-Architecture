@@ -125,10 +125,11 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
 
     #calculate spearman's r
     spear = stats.spearmanr(similarity_scores,labels)
-    r = spear[0]
     print(spear)
-    print(("---------Pearson's correlation coefficient is {}---------".format(r)))
-    return pearson
+    r = spear[0]
+
+    print(("---------Spearman's rank coefficient is {}---------".format(r)))
+    return r
 
 def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_path):
     loss_list = list()
@@ -153,7 +154,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_pa
     print(accuracy_list)
 
 def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpath):
-    pearsons = list()
+    spearman_r = list()
     for k in range(int(epoch)):
         print(("-----------------Model Saved at Epoch {}------------------".format(k)))
         print("-----------------Evaluating------------------")
@@ -161,11 +162,12 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
         path = str(model_path+"model"+str(k)+".pt")
         model.load_state_dict(torch.load(path))
         model.to(device)
-        pearson = evaluate_model_cosine_similarity(dev_dataloader, model, device)
-        pearsons.append(pearson)
+        r = evaluate_model_cosine_similarity(dev_dataloader, model, device)
+        spearman_r.append(r)
+        rs = " ".join(spearman_r)
         with open(str(outpath+"dev_result.txt"), "a") as f:
             f.write((str(k)+"\n"))
-            f.write((str(pearson)+"\n"))
+            f.write((rs+"\n"))
             f.close()
 
     #find max of accuracy list
