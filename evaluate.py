@@ -24,7 +24,7 @@ if __name__ == "__main__":
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
     epoch = 180 #remember to change here
-    best_model_path = model.evaluate_saved_model(epoch,model_path=args.model_path
+    best_model_path = model.evaluate_saved_model(epoch,model_name=args.model_name,model_path=args.model_path
                                            ,dev_dataloader=dev_dataloader ,device=device,outpath = args.outpath)
 
     print("-----------------Evaluating on Test set------------------")
