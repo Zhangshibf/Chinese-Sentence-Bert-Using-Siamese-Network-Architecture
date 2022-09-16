@@ -159,7 +159,7 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
         print(("-----------------Model Saved at Epoch {}------------------".format(k)))
         print("-----------------Evaluating------------------")
         model = CSBERT(model_name)
-        path = str(model_path+"model"+str(k)+".pt")
+        path = str(model_path+"macbertmodel"+str(k)+".pt")
         model.load_state_dict(torch.load(path))
         model.to(device)
         r = evaluate_model_cosine_similarity(dev_dataloader, model, device)
@@ -171,44 +171,13 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
             f.close()
 
     #find max of accuracy list
-    ind = np.argmax(pearsons)
+    ind = np.argmax(np.array(spearman_r))
     print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
     best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
 
     return best_performance_model_path
 
-"""
-def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
-    loss_list = list()
-    accuracy_list = list()
-    for k in range(int(epoch)):
-        print(("-----------------Model Saved at Epoch {}------------------".format(k)))
-        print("-----------------Evaluating------------------")
-        model = CSBERT()
-        path = str(model_path+"model"+str(k)+".pt")
-        model.load_state_dict(torch.load(path))
-        model.to(device)
-        loss, acc = evaluate_model(dev_dataloader, model, device)
-        loss_list.append(str(loss.tolist()))
-        accuracy_list.append(str(acc))
 
-    print(loss_list)
-    print(accuracy_list)
-
-    with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/dev_result.txt", "a") as f:
-        l = " ".join(loss_list)
-        a = " ".join(accuracy_list)
-        f.write(str(l+"\n"))
-        f.write(str(a+"\n"))
-        f.close()
-
-    #find max of accuracy list
-    ind = np.argmax(accuracy_list)
-    print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
-    best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
-
-    return best_performance_model_path
-"""
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
@@ -248,6 +217,41 @@ class CSBERT(nn.Module):
         sentence_embedding = self.linear1(pooled)
 
         return sentence_embedding
+
+
+"""
+def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
+    loss_list = list()
+    accuracy_list = list()
+    for k in range(int(epoch)):
+        print(("-----------------Model Saved at Epoch {}------------------".format(k)))
+        print("-----------------Evaluating------------------")
+        model = CSBERT()
+        path = str(model_path+"model"+str(k)+".pt")
+        model.load_state_dict(torch.load(path))
+        model.to(device)
+        loss, acc = evaluate_model(dev_dataloader, model, device)
+        loss_list.append(str(loss.tolist()))
+        accuracy_list.append(str(acc))
+
+    print(loss_list)
+    print(accuracy_list)
+
+    with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/dev_result.txt", "a") as f:
+        l = " ".join(loss_list)
+        a = " ".join(accuracy_list)
+        f.write(str(l+"\n"))
+        f.write(str(a+"\n"))
+        f.close()
+
+    #find max of accuracy list
+    ind = np.argmax(accuracy_list)
+    print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
+    best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
+
+    return best_performance_model_path
+"""
+
 """
 class CSBERT(nn.Module):
     def __init__(self,model_name ,pooling = "mean",freeze=0):
