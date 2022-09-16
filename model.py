@@ -5,6 +5,8 @@ import argparse
 from torch import optim
 import pickle
 import numpy as np
+from scipy import stats
+
 
 
 def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
@@ -120,11 +122,12 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             embedding2 = model.generate_sentence_embedding(instance2,mask2)
             similarity = nn.functional.cosine_similarity(embedding1,embedding2)
             similarity_scores.extend(similarity.tolist())
-    print(similarity_scores)
-    print(labels)
-    #calculate pearson's correlation score
-    pearson = np.corrcoef(np.array(similarity_scores), np.array(labels))
-    print(("-----------------Pearson's correlation coefficient is {}------------------".format(pearson)))
+
+    #calculate spearman's r
+    spear = stats.spearmanr(similarity_scores,labels)
+    r = spear['correlation']
+    print(spear)
+    print(("---------Pearson's correlation coefficient is {}---------".format(r)))
     return pearson
 
 def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_path):
