@@ -20,10 +20,10 @@ if __name__ == "__main__":
 
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
-
+    outpath = args.path
     epoch = 180 #remember to change here
     best_model_path = model.evaluate_saved_model(epoch,model_path=args.path
-                                           ,dev_dataloader=dev_dataloader ,device=device)
+                                           ,dev_dataloader=dev_dataloader ,device=device,outpath = outpath)
 
     print("-----------------Evaluating on Test set------------------")
     best_model = model.CSBERT()
