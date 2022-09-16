@@ -125,7 +125,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
 
     #calculate spearman's r
     spear = stats.spearmanr(similarity_scores,labels)
-    r = spear['correlation']
+    r = spear[0]
     print(spear)
     print(("---------Pearson's correlation coefficient is {}---------".format(r)))
     return pearson
