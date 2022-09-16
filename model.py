@@ -119,7 +119,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             embedding1 = model.generate_sentence_embedding(instance1,mask1)
             embedding2 = model.generate_sentence_embedding(instance2,mask2)
             similarity = nn.functional.cosine_similarity(embedding1,embedding2)
-            similarity_scores.append(similarity.tolist())
+            similarity_scores.extend(similarity.tolist())
     print(similarity_scores)
     print(labels)
     #calculate pearson's correlation score
