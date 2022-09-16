@@ -7,7 +7,7 @@ import pickle
 import numpy as np
 
 
-def train_model(k,dataloader,model,optimizer,device,save_model = False):
+def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
     model.train()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
@@ -42,9 +42,9 @@ def train_model(k,dataloader,model,optimizer,device,save_model = False):
 
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
-
+#"/home/CE/zhangshi/mygithubprojects/csbert_macbert/"
     if save_model==True:
-        model_path = str("/home/CE/zhangshi/mygithubprojects/csbert_macbert/" + "model" + str(k) + ".pt")
+        model_path = str(str(output_path) + "model" + str(k) + ".pt")
         torch.save(model.state_dict(), model_path)
         print("Model saved, path is {}".format(model_path))
 
@@ -83,19 +83,20 @@ def evaluate_model(dataloader,model,device):
 
         return avg_loss, avg_accuracy
 
-def train_and_save_model(epoch,model,optimizer,train_dataloader,device):
+def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_path):
     loss_list = list()
     accuracy_list = list()
     for k in range(epoch):
         print(("-----------------Epoch {}------------------".format(k)))
         print("-----------------Training------------------")
         model.to(device)
-        loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True)
+        loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True,output_path=output_path)
         loss = str(loss.tolist())
         acc = str(acc)
         loss_list.append(loss)
         accuracy_list.append(acc)
-        with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/train_result.txt", "a") as f:
+        result_path = str(output_path + "train_result.txt")
+        with open(result_path, "a") as f:
             f.write(str("Epoch "+str(k)))
             f.write(str("loss: "+loss + "\n"))
             f.write("accuracy: "+acc + "\n")
