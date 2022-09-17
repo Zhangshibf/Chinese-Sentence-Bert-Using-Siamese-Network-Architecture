@@ -173,7 +173,7 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
     #find max of accuracy list
     ind = np.argmax(np.array(spearman_r))
     print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
-    best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
+    best_performance_model_path = str(model_path+"macbertmodel"+str(ind)+".pt")
 
     return best_performance_model_path
 
