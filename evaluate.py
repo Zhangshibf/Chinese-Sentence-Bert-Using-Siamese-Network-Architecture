@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
-    epoch = 180 #remember to change here
+    epoch = 1
     best_model_path = model.evaluate_saved_model(epoch,model_name=args.model_name,model_path=args.model_path
                                            ,dev_dataloader=dev_dataloader ,device=device,outpath = args.outpath)
 
@@ -31,6 +31,5 @@ if __name__ == "__main__":
     best_model = model.CSBERT(model_name=args.model_name)
     best_model.load_state_dict(torch.load(best_model_path))
     best_model.to(device)
-    loss, acc = model.evaluate_model(test_dataloader, best_model, device)
-    print("----------------------Loss on Test set {}-----------------------------------".format(loss))
-    print("----------------------Accuracy on Test set {}-----------------------------------".format(acc))
+    pearson = model.evaluate_model(test_dataloader, best_model, device)
+    print("----------------------pearson on Test set {}-----------------------------------".format(pearson))
