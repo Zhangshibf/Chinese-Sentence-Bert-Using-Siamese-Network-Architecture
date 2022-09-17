@@ -46,13 +46,12 @@ def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 #"/home/CE/zhangshi/mygithubprojects/csbert_macbert/"
     if save_model==True:
-        model_path = str(str(output_path) + "macbertmodel" + str(k) + ".pt")
-        torch.save(model.state_dict(), model_path)
+        torch.save(model.state_dict(), output_path)
         print("Model saved, path is {}".format(model_path))
 
     return avg_loss,avg_accuracy
 
-def evaluate_model(dataloader,model,device):
+def evaluate_model_accuracy(dataloader,model,device):
     model.eval()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
@@ -152,32 +151,6 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_pa
 
     print(loss_list)
     print(accuracy_list)
-
-def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpath):
-    spearman_r = list()
-    for k in range(int(epoch)):
-        print(("-----------------Model Saved at Epoch {}------------------".format(k)))
-        print("-----------------Evaluating------------------")
-        model = CSBERT(model_name)
-        path = str(model_path+"macbertmodel"+str(k)+".pt")
-        model.load_state_dict(torch.load(path))
-        model.to(device)
-        r = evaluate_model_cosine_similarity(dev_dataloader, model, device)
-        spearman_r.append(str(r))
-        rs = " ".join(spearman_r)
-        with open(str(outpath+"dev_result.txt"), "a") as f:
-            f.write((str(k)+"\n"))
-            f.write((rs+"\n"))
-            f.close()
-
-    #find max of accuracy list
-    ind = np.argmax(np.array(spearman_r))
-    print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
-    best_performance_model_path = str(model_path+"macbertmodel"+str(ind)+".pt")
-
-    return best_performance_model_path
-
-
 
 def calculate_correct_prediction(outputs,label):
     predictions = torch.argmax(outputs, dim=1).tolist()
