@@ -46,7 +46,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 #"/home/CE/zhangshi/mygithubprojects/csbert_macbert/"
     if save_model==True:
-        model_path = str(str(output_path) + "model" + str(k) + ".pt")
+        model_path = str(str(output_path) + "macbertmodel" + str(k) + ".pt")
         torch.save(model.state_dict(), model_path)
         print("Model saved, path is {}".format(model_path))
 
