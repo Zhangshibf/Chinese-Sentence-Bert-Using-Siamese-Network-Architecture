@@ -22,5 +22,6 @@ if __name__ == "__main__":
 
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
-    model.evaluate_model_cosine_similarity(dev_dataloader, model=args.model_name, device=args.device)
-    model.evaluate_model_cosine_similarity(test_dataloader, model=args.model_name, device=args.device)
+    eva_model = CSBERT(args.model_name)
+    model.evaluate_model_cosine_similarity(dev_dataloader, model=eva_model, device=args.device)
+    model.evaluate_model_cosine_similarity(test_dataloader, model=eva_model, device=args.device)
