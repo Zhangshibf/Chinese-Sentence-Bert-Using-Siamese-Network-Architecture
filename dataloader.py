@@ -65,8 +65,8 @@ def create_dataloader(data_path,model_name ="hfl/chinese-bert-wwm", batch_size =
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Create the dataloader and pickle it.')
-    parser.add_argument('--i',help = "path to the train/dev/test set")
-    parser.add_argument('--o',help = "path to save the pickled dataloader of train/dev/test set")
+    parser.add_argument('--i',help = "path to the dataset", required=True)
+    parser.add_argument('--o',help = "path to save the pickled dataloader", required=True)
     parser.add_argument('--model_name', help="use 'hfl/chinese-macbert-base' for MacBert, 'hfl/chinese-bert-wwm' for bert-wwm. Default bert-wwm",
                         default="hfl/chinese-bert-wwm")
     args = parser.parse_args()
