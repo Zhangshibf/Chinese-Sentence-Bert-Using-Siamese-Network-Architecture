@@ -51,7 +51,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
         print("Model saved, path is {}".format(model_path))
 
     return avg_loss,avg_accuracy
-"""
+
 def evaluate_model(dataloader,model,device):
     model.eval()
     loss_f = nn.CrossEntropyLoss()
@@ -85,7 +85,7 @@ def evaluate_model(dataloader,model,device):
 
     return avg_loss, avg_accuracy
 
-"""
+
 def evaluate_model_cosine_similarity(dataloader,model,device):
     #return pearson's correlation
     model.eval()
