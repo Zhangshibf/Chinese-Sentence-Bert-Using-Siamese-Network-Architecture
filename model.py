@@ -1,10 +1,6 @@
 import transformers
 from torch import nn
 import torch
-import argparse
-from torch import optim
-import pickle
-import numpy as np
 from scipy import stats
 
 
@@ -47,7 +43,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
 #"/home/CE/zhangshi/mygithubprojects/csbert_macbert/"
     if save_model==True:
         torch.save(model.state_dict(), output_path)
-        print("Model saved, path is {}".format(model_path))
+        print("Model saved at {}".format(output_path))
 
     return avg_loss,avg_accuracy
 
