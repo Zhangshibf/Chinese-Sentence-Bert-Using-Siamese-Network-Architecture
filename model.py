@@ -159,7 +159,7 @@ def evaluate_saved_model(epoch,model_name,model_path,dev_dataloader,device,outpa
         print(("-----------------Model Saved at Epoch {}------------------".format(k)))
         print("-----------------Evaluating------------------")
         model = CSBERT(model_name)
-        path = str(model_path+"macbertmodel"+str(k)+".pt")
+        path = str(model_path+"model"+str(k)+".pt")
         model.load_state_dict(torch.load(path))
         model.to(device)
         r = evaluate_model_cosine_similarity(dev_dataloader, model, device)
