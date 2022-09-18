@@ -6,16 +6,16 @@ import argparse
 import pickle
 
 def load_data(data_path):
-    train = []
+    data = []
     for line in open(data_path, 'rb'):
         try:
-            train.append(json.loads(line))
+            data.append(json.loads(line))
         except:
             print(line)
 
     sentences = list()
     label = list()
-    for i in train:
+    for i in data:
         if i["label"] != "-": #some sentence pairs have no label. These instances are excluded from train set
             if i["label"] == "entailment":
                 label.append(0)
