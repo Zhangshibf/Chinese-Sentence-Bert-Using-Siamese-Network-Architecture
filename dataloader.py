@@ -8,8 +8,10 @@ import pickle
 def load_data(data_path):
     train = []
     for line in open(data_path, 'rb'):
-        print(line)
-        train.append(json.loads(line))
+        try:
+            train.append(json.loads(line))
+        except:
+            print(line)
 
     sentences = list()
     label = list()
