@@ -4,8 +4,7 @@ import torch
 from scipy import stats
 
 
-
-def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
+def train_model(dataloader,model,optimizer,device,save_model,output_path):
     model.train()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
@@ -40,7 +39,7 @@ def train_model(k,dataloader,model,optimizer,device,save_model,output_path):
 
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
-#"/home/CE/zhangshi/mygithubprojects/csbert_macbert/"
+
     if save_model==True:
         torch.save(model.state_dict(), output_path)
         print("Model saved at {}".format(output_path))
@@ -82,7 +81,7 @@ def evaluate_model_accuracy(dataloader,model,device):
 
 
 def evaluate_model_cosine_similarity(dataloader,model,device):
-    #return pearson's correlation
+    #return pearson's correlation coefficient
     model.eval()
     total_num = 0
     similarity_scores = list()
