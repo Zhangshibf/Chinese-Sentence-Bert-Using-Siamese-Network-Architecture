@@ -4,7 +4,7 @@ import torch
 from scipy import stats
 
 
-def train_model(dataloader,model,optimizer,device,save_model,output_path):
+def train_model(dataloader,model,optimizer,device,output_path):
     model.train()
     loss_f = nn.CrossEntropyLoss()
     total_loss = 0
@@ -40,9 +40,8 @@ def train_model(dataloader,model,optimizer,device,save_model,output_path):
     print(("-----------------Average Loss {}------------------".format(avg_loss)))
     print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-    if save_model==True:
-        torch.save(model.state_dict(), output_path)
-        print("Model saved at {}".format(output_path))
+    torch.save(model.state_dict(), output_path)
+    print("Model saved at {}".format(output_path))
 
     return avg_loss,avg_accuracy
 
@@ -133,7 +132,7 @@ def train_and_save_model(epoch,model,optimizer,train_dataloader,device,output_pa
         print("-----------------Training------------------")
         model.to(device)
         o = str(output_path+str(k)+".pt")
-        loss, acc = train_model(k,train_dataloader, model, optimizer,device,save_model=True,output_path=o)
+        loss, acc = train_model(train_dataloader, model, optimizer,device,o)
         loss = str(loss.tolist())
         acc = str(acc)
         loss_list.append(loss)
