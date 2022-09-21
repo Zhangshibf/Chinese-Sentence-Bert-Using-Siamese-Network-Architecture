@@ -91,8 +91,9 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             instance = batch[0]
             mask = batch[1]
             label = batch[2]
-            labels = label.tolist() #delete this later
-#            label = label.tolist()
+            label = label.tolist()
+            for i in label:#to be deleted
+                labels.append(i)#tobede
             """
                         if i["label"] == "entailment":
                 label.append(0)
