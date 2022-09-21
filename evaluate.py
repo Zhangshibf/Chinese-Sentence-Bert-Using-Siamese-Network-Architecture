@@ -20,7 +20,6 @@ if __name__ == "__main__":
     device_str = "cuda:" + str(args.device)
     device = torch.device(device_str)
     eva_model = model.CSBERT(args.model_name)
-    if args.model_path:
-        path = args.model_path
-        model.load_state_dict(torch.load(path))
+    path = args.model_path
+    eva_model.load_state_dict(torch.load(path))
     model.evaluate_model_cosine_similarity(test_dataloader, model=eva_model, device=device)
