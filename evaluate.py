@@ -22,4 +22,5 @@ if __name__ == "__main__":
     eva_model = model.CSBERT(args.model_name)
     path = args.model_path
     eva_model.load_state_dict(torch.load(path))
+    eva_model = eva_model.to(device)
     model.evaluate_model_cosine_similarity(test_dataloader, model=eva_model, device=device)
