@@ -45,39 +45,6 @@ def train_model(dataloader,model,optimizer,device,output_path):
 
     return avg_loss,avg_accuracy
 
-def evaluate_model_accuracy(dataloader,model,device):
-    model.eval()
-    loss_f = nn.CrossEntropyLoss()
-    total_loss = 0
-    correct_pred = 0
-    total_num = 0
-
-    with torch.no_grad():
-        for batch in dataloader:
-            total_num += len(batch[0])
-            instance = batch[0]
-            mask = batch[1]
-            label = batch[2]
-            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
-
-            instance1 = instance[:,0,:].to(device)
-            instance2 = instance[:,1,:].to(device)
-            mask1 = mask[:,0,:].to(device)
-            mask2 = mask[:,1,:].to(device)
-
-            outputs = model(instance1,mask1,instance2,mask2)
-            one_hot_label = one_hot_label.float().to(device)
-            loss = loss_f(outputs, one_hot_label)
-            total_loss += loss
-            correct_pred += calculate_correct_prediction(outputs,label)
-
-    avg_loss = total_loss / total_num
-    avg_accuracy = correct_pred/total_num
-    print(("-----------------Average Loss {}------------------".format(avg_loss)))
-    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
-
-    return avg_loss, avg_accuracy
-
 
 def evaluate_model_cosine_similarity(dataloader,model,device):
     #return pearson's correlation coefficient
@@ -191,61 +158,37 @@ class CSBERT(nn.Module):
         return sentence_embedding
 
 
-"""
-def evaluate_saved_model(epoch,model_path,dev_dataloader,device):
-    loss_list = list()
-    accuracy_list = list()
-    for k in range(int(epoch)):
-        print(("-----------------Model Saved at Epoch {}------------------".format(k)))
-        print("-----------------Evaluating------------------")
-        model = CSBERT()
-        path = str(model_path+"model"+str(k)+".pt")
-        model.load_state_dict(torch.load(path))
-        model.to(device)
-        loss, acc = evaluate_model(dev_dataloader, model, device)
-        loss_list.append(str(loss.tolist()))
-        accuracy_list.append(str(acc))
 
-    print(loss_list)
-    print(accuracy_list)
+"""def evaluate_model_accuracy(dataloader,model,device):
+    model.eval()
+    loss_f = nn.CrossEntropyLoss()
+    total_loss = 0
+    correct_pred = 0
+    total_num = 0
 
-    with open("/home/CE/zhangshi/mygithubprojects/csbert_macbert/dev_result.txt", "a") as f:
-        l = " ".join(loss_list)
-        a = " ".join(accuracy_list)
-        f.write(str(l+"\n"))
-        f.write(str(a+"\n"))
-        f.close()
+    with torch.no_grad():
+        for batch in dataloader:
+            total_num += len(batch[0])
+            instance = batch[0]
+            mask = batch[1]
+            label = batch[2]
+            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
 
-    #find max of accuracy list
-    ind = np.argmax(accuracy_list)
-    print(("-----------------Best Performance at Epoch {}------------------".format(ind)))
-    best_performance_model_path = str(model_path+"model"+str(ind)+".pt")
+            instance1 = instance[:,0,:].to(device)
+            instance2 = instance[:,1,:].to(device)
+            mask1 = mask[:,0,:].to(device)
+            mask2 = mask[:,1,:].to(device)
 
-    return best_performance_model_path
-"""
+            outputs = model(instance1,mask1,instance2,mask2)
+            one_hot_label = one_hot_label.float().to(device)
+            loss = loss_f(outputs, one_hot_label)
+            total_loss += loss
+            correct_pred += calculate_correct_prediction(outputs,label)
 
-"""
-class CSBERT(nn.Module):
-    def __init__(self,model_name ,pooling = "mean",freeze=0):
-        super(CSBERT, self).__init__()
+    avg_loss = total_loss / total_num
+    avg_accuracy = correct_pred/total_num
+    print(("-----------------Average Loss {}------------------".format(avg_loss)))
+    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
 
-        self.bert = transformers.BertModel.from_pretrained(model_name)
-        self.linear1 = nn.Linear(768, out_features = 300)
-        self.linear2 = nn.Linear(900, out_features = 3)
-        self.softmax = nn.Softmax(dim=1)#I am not sure if this dimension is right... check later
-
-    def forward(self,sent_id1,mask1,sent_id2,mask2):
-        out1 = self.bert(sent_id1, attention_mask=mask1)
-        pooled1 = torch.mean((out1[0] * mask1.unsqueeze(-1)), axis=1)#check if correct
-        sentence_embedding1 = self.linear1(pooled1)
-
-        out2 = self.bert(sent_id2, attention_mask=mask2)
-        pooled2 = torch.mean((out2[0] * mask2.unsqueeze(-1)), axis=1)
-        sentence_embedding2 = self.linear1(pooled2)
-
-        embedding_concat = torch.cat((sentence_embedding1, sentence_embedding2, sentence_embedding1 - sentence_embedding2), 1)
-        out_linear = self.linear2(embedding_concat)
-        prediction = self.softmax(out_linear)
-
-        return prediction
+    return avg_loss, avg_accuracy
 """
