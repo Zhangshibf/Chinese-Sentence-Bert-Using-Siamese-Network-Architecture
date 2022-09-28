@@ -28,9 +28,10 @@ sentence_embeddings = sentence_bert_model.generate_sentence_embedding(sentence,m
 ------------------------------------------------------------
 # Alternatively, if you'd like to try training Chinese Sentence BERT yourself...
 ## Data for training
-
+Please download train set of Original Chinese Natural Language Inference dataset from [here](https://github.com/CLUEbenchmark/OCNLI/tree/main/data/ocnli)
+Please download Chinese Multi-Genre NLI dataset from [here](https://storage.googleapis.com/cluebenchmark/tasks/cmnli_public.zip)
 ## Data for testing
-
+Please download dev set of Original Chinese Natural Language Inference dataset from [here](https://github.com/CLUEbenchmark/OCNLI/tree/main/data/ocnli)
 ## Dataloader
 
 ## How to train Chinese Sentence BERT?
