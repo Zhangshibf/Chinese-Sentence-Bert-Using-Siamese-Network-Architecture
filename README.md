@@ -5,8 +5,11 @@ Please refer to [this report](https://drive.google.com/file/d/1VIoPOra21WvKlv8C4
 -----------------------------------------------------------
 # How to use Chinese Sentence BERT to generate sentence embeddings?
 
-Download Chinese Sentence BERT model from [here](https://drive.google.com/file/d/1ctyI2eRZVDXKRSCuiEsmFVT5Onrr81ZX/view?usp=sharing)
+Download Chinese Sentence BERT model from [here](https://drive.google.com/file/d/1ctyI2eRZVDXKRSCuiEsmFVT5Onrr81ZX/view?usp=sharing).
 
+
+sentence_bert_model = model.CSBERT()
+sentence_bert_model.load_state_dict(torch.load(path_to_the_Chinese_Sentence_BERT_model))
 ------------------------------------------------------------
 # Alternatively, if you'd like to try training Chinese Sentence BERT yourself...
 ## Data for training
