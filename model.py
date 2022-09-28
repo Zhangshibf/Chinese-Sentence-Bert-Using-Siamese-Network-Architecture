@@ -67,14 +67,14 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
                 label.append(1)
             elif i["label"] == "contradiction":
                 label.append(2)"""
-            """
+            
             for i in label:
                 if i ==0:
                     labels.append(1)
                 elif i ==1:
                     labels.append(0)
                 elif i ==2:
-                    labels.append(-1)"""
+                    labels.append(-1)
 
             instance1 = instance[:,0,:].to(device)
             instance2 = instance[:,1,:].to(device)
