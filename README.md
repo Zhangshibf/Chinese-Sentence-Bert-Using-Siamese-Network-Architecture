@@ -1,8 +1,8 @@
 # Chinese-Sentence-Bert-Using-Siamese-Network-Architecture
-Please refer to this report for information
+Please refer to [this report](https://drive.google.com/file/d/1VIoPOra21WvKlv8C4Ehp7kX2JxkGbwwI/view?usp=sharing) for information
 -----------------------------------------------------------
 # How to use Chinese Sentence BERT to generate sentence embeddings?
-Download Chinese Sentence BERT model from here
+Download Chinese Sentence BERT model from [here]()
 
 ------------------------------------------------------------
 # Alternatively, if you'd like to try training Chinese Sentence BERT yourself...
