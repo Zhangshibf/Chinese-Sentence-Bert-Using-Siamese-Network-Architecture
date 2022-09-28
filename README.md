@@ -35,10 +35,13 @@ Please download Chinese Multi-Genre NLI dataset from [here](https://storage.goog
 Please download dev set of Original Chinese Natural Language Inference dataset from [here](https://github.com/CLUEbenchmark/OCNLI/tree/main/data/ocnli)
 ## Dataloader
 ```
+python dataloader.py --i path_to_the_dataset --o path_to_save_the_dataloader
 ```
 ## How to train Chinese Sentence BERT?
 ```
+python train.py --train path_to_the_dataloader_of_train_set --out path_to_save_trained_model --device the_cuda_number_you'd_like_to_use
 ```
 ## How to test Chinese Sentence BERT?
 ```
+python evaluate.py --test path_to_the_dataloader_of_test_set --device the_cuda_number_you'd_like_to_use --model_path path_to_save_trained_model
 ```
