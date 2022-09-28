@@ -27,6 +27,15 @@ sentence_embeddings = sentence_bert_model.generate_sentence_embedding(sentence,m
 
 ------------------------------------------------------------
 # Alternatively, if you'd like to try training Chinese Sentence BERT yourself...
+
+## Set up environment
+
+. .bashrc
+
+conda env create -f env_csbert.yml
+
+conda activate csbert
+
 ## Data for training
 Please download train set of Original Chinese Natural Language Inference dataset from [here](https://github.com/CLUEbenchmark/OCNLI/tree/main/data/ocnli)
 
