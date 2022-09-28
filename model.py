@@ -47,7 +47,7 @@ def train_model(dataloader,model,optimizer,device,output_path):
 
 
 def evaluate_model_cosine_similarity(dataloader,model,device):
-    #return pearson's correlation coefficient
+    #return spearman's rho
     model.eval()
     total_num = 0
     similarity_scores = list()
@@ -59,8 +59,7 @@ def evaluate_model_cosine_similarity(dataloader,model,device):
             mask = batch[1]
             label = batch[2]
             label = label.tolist()
-            for i in label:#to be deleted
-                labels.append(i)#tobede
+
             """
                         if i["label"] == "entailment":
                 label.append(0)
