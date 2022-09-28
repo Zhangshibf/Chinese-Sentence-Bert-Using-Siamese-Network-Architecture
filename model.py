@@ -156,39 +156,3 @@ class CSBERT(nn.Module):
         sentence_embedding = self.linear1(pooled)
 
         return sentence_embedding
-
-
-
-"""def evaluate_model_accuracy(dataloader,model,device):
-    model.eval()
-    loss_f = nn.CrossEntropyLoss()
-    total_loss = 0
-    correct_pred = 0
-    total_num = 0
-
-    with torch.no_grad():
-        for batch in dataloader:
-            total_num += len(batch[0])
-            instance = batch[0]
-            mask = batch[1]
-            label = batch[2]
-            one_hot_label = nn.functional.one_hot(label,num_classes = 3)
-
-            instance1 = instance[:,0,:].to(device)
-            instance2 = instance[:,1,:].to(device)
-            mask1 = mask[:,0,:].to(device)
-            mask2 = mask[:,1,:].to(device)
-
-            outputs = model(instance1,mask1,instance2,mask2)
-            one_hot_label = one_hot_label.float().to(device)
-            loss = loss_f(outputs, one_hot_label)
-            total_loss += loss
-            correct_pred += calculate_correct_prediction(outputs,label)
-
-    avg_loss = total_loss / total_num
-    avg_accuracy = correct_pred/total_num
-    print(("-----------------Average Loss {}------------------".format(avg_loss)))
-    print(("-----------------Average Accuracy {}------------------".format(avg_accuracy)))
-
-    return avg_loss, avg_accuracy
-"""
